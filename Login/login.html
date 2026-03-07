@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charser="UTF-8">
+        <title> Role GateWay </title>
+        <link rel="stylesheet" herf="login.css">
+    </head>
+    <body>
+        <div class="container">
+        <h1> What's your role? </h1>
+        <div class="roles">
+        <div class="role-card" onclick="selectRole(this, 'admin')">
+            <h3> Railway Administrator </h3>
+        </div>
+        <div class="role-card" onclick="selectRole(this, 'manager')">
+            <h3> Manager </h3>
+        </div>
+        <div class="role-card" onclick="selectRole(this, 'satff')">
+            <h3> Reservation agent </h3>
+        </div>
+        </div>
+        <button class="next-btn" onclick="goNext()">Next</button>
+        </div>
+        <script src="role-gateway.js"></script>
+    </body>
+</html>
