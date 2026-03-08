@@ -1,6 +1,6 @@
 body{
     font-family: Arial;
-    background-color: #f5f5f7;
+    background-color: #E0FFFF;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -20,7 +20,7 @@ body{
 .role-card{
     width: 200px;
     height:140px;
-    background: cadetblue;
+    background: rgb(136, 188, 190);
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -35,13 +35,13 @@ body{
     transform: scale(1.05);
 }
 .role-card.selected{
-    border:2px solid #0056b3
+    border:2px solid #0c2f55
 }
 .next-btn{
     padding: 12px 40px;
     border:none;
     border-radius: 8px;
-    background: #666;
-    color:pink;
+    background: #000000;
+    color:rgb(255, 255, 255);
     cursor: pointer;
 }
