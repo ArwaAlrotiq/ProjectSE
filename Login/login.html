@@ -1,26 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
     <head>
-        <meta charser="UTF-8">
+        <meta charset="UTF-8">
         <title> Role GateWay </title>
-        <link rel="stylesheet" herf="login.css">
+        <link rel="stylesheet" href="login.css">
     </head>
     <body>
         <div class="container">
         <h1> What's your role? </h1>
+=======
+<head>
+    <meta charset="UTF-8">
+    <title>Role Gateway</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container">
+        <h1>What's your role?</h1>
+
+>>>>>>> 16d27b540cd63ebc4ed9417b5c41b4519c2b8d8c
         <div class="roles">
-        <div class="role-card" onclick="selectRole(this, 'admin')">
-            <h3> Railway Administrator </h3>
+            <div class="role-card" onclick="selectRole(this, 'admin')">
+                <h3>Railway Administrator</h3>
+            </div>
+
+            <div class="role-card" onclick="selectRole(this, 'manager')">
+                <h3>Manager</h3>
+            </div>
+
+            <div class="role-card" onclick="selectRole(this, 'staff')">
+                <h3>Reservation Agent</h3>
+            </div>
         </div>
-        <div class="role-card" onclick="selectRole(this, 'manager')">
-            <h3> Manager </h3>
-        </div>
-        <div class="role-card" onclick="selectRole(this, 'satff')">
-            <h3> Reservation agent </h3>
-        </div>
-        </div>
+
         <button class="next-btn" onclick="goNext()">Next</button>
-        </div>
-        <script src="role-gateway.js"></script>
-    </body>
+    </div>
+
+    <script src="role-gateway.js"></script>
+</body>
 </html>
