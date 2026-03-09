@@ -13,7 +13,7 @@
     <h1>Train Schedules Management</h1>
     
     <div class="form-container">
-      <form id="schedule-form">
+      <form id="schedule-form" onsubmit="return validate()">
         <input type="hidden" id="trip-id">
         
         <div class="form-group">
@@ -61,6 +61,6 @@
   </div>
 
   <script src="form.js" type="module"></script>
-
+  <script src="validation.js"></script>
 </body>
 </html>
