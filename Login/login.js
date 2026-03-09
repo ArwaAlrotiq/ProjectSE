@@ -43,3 +43,19 @@ function IntegrationTest() {
 
 UnitTests();
 IntegrationTest();
+
+function selectRole(role) {
+    sessionStorage.setItem("role", role);
+    console.log("Role selected:", role);
+    window.location.href = "dashboard.html";
+}
+
+window.addEventListener("load", () => {
+    const role = sessionStorage.getItem("role");
+    if (!role) {
+        alert("No role selected. Please choose your role first.");
+        window.location.href = "login.html";
+    } else {
+        console.log("Logged in as:", role);
+    }
+});
