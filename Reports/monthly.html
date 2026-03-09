@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Monthly Booking Report</title>
+</head>
+<body>
+
+<h1>Monthly Booking Report</h1>
+<p>Monthly bookings: <span id="monthlyReport"></span></p>
+
+<script>
+function generateMonthlyReport() {
+    
+    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    const now = new Date();
+
+    
+    let monthlyCount = bookings.filter(b => {
+        let bookingDate = new Date(b.date);
+        return bookingDate.getMonth() === now.getMonth() &&
+               bookingDate.getFullYear() === now.getFullYear();
+    });
+
+    
+    document.getElementById("monthlyReport").textContent = monthlyCount.length;
+}
+
+
+generateMonthlyReport();
+</script>
+
+</body>
+</html>

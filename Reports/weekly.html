@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Booking Report</title>
+</head>
+<body>
+
+<h1>Weekly Booking Report</h1>
+<p>Weekly bookings: <span id="weeklyReport"></span></p>
+
+<script>
+function generateWeeklyReport() {
+    
+    let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    const now = new Date();
+    const weekStart = new Date();
+    weekStart.setDate(now.getDate() - 7);
+
+    
+    let weeklyCount = bookings.filter(b => {
+        let bookingDate = new Date(b.date);
+        return bookingDate >= weekStart && bookingDate <= now;
+    });
+
+    document.getElementById("weeklyReport").textContent = weeklyCount.length;
+}
+
+
+generateWeeklyReport();
+</script>
+
+</body>
+</html>
