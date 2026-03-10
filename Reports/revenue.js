@@ -44,3 +44,20 @@ function renderRevenueChart() {
 }
 
 renderRevenueChart();
+function calculateTotalRevenueForDuration(startDay, endDay) {
+    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+    const revenueByTrain = {};
+
+    bookings.forEach(booking => {
+        const train = booking.trip || "Unknown";
+        const dailyRevenue = booking.dailyRevenue || []; // لو عندك الإيرادات اليومية
+        const revenue = dailyRevenue.slice(startDay, endDay+1).reduce((a,b)=>a+b,0) || booking.totalPrice || 0;
+
+        if (!revenueByTrain[train]) revenueByTrain[train] = 0;
+        revenueByTrain[train] += revenue;
+    });
+
+    return revenueByTrain;
+}
+
+
