@@ -20,6 +20,7 @@ const USERS = [
     }
 ];
 
+// Validate login credentials
 function checkLogin(username, password) {
     const hashedInput = simpleHash(password);
     
@@ -38,7 +39,7 @@ function checkLogin(username, password) {
     return { success: false };
 }
 
-// Protect pages — add this call on every page except login
+// Protect pages — call this on every protected page
 function checkAuth() {
     const user = sessionStorage.getItem("currentUser");
     if (!user) {

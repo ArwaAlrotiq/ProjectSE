@@ -1,45 +1,29 @@
+// Handles login validation and redirects based on role
+function handleLogin() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const errorDiv = document.getElementById("error-msg");
 
-export function validateRoleSelection(role) {
-    if (!role || role.trim() === "") {
-        return {
-            valid: false,
-            message: "Please select a role first"
-        };
+    // Check for empty fields
+    if (!username || !password) {
+        errorDiv.classList.remove("hidden");
+        errorDiv.textContent = "Please enter username and password.";
+        return;
     }
 
-    return {
-        valid: true,
-        message: "Role selection is valid"
-    };
-}
+    errorDiv.classList.add("hidden");
 
-function UnitTests() {
-    console.log("Running Unit Tests...");
+    // Validate login using checkLogin()
+    const result = checkLogin(username, password);
 
-    let test1 = validateRoleSelection("");
-    console.assert(test1.valid === false, "Test 1 Failed: empty role should be invalid");
+    if (result.success) {
+        // Save user session
+        sessionStorage.setItem("currentUser", JSON.stringify(result.user));
 
-    let test2 = validateRoleSelection(null);
-    console.assert(test2.valid === false, "Test 2 Failed: null role should be invalid");
-
-    let test3 = validateRoleSelection("admin");
-    console.assert(test3.valid === true, "Test 3 Failed: admin role should be valid");
-
-    console.log("Unit Tests Completed");
-}
-
-function IntegrationTest() {
-    console.log("Running Integration Test...");
-
-    const selectedRole = "manager";
-    const validation = validateRoleSelection(selectedRole);
-
-    if (validation.valid) {
-        console.log("Integration Test Passed: " + validation.message);
+        // Redirect to correct dashboard
+        window.location.href = result.redirect;
     } else {
-        console.log("Integration Test Failed: " + validation.message);
+        errorDiv.classList.remove("hidden");
+        errorDiv.textContent = "Invalid username or password.";
     }
 }
-
-UnitTests();
-IntegrationTest();
