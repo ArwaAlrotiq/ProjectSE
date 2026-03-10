@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Train Schedules Management</title>
+
   <link rel="stylesheet" href="form.css">
 </head>
 
@@ -12,7 +13,7 @@
     <h1>Train Schedules Management</h1>
     
     <div class="form-container">
-      <form id="schedule-form">
+      <form id="schedule-form" onsubmit="return validate()">
         <input type="hidden" id="trip-id">
         
         <div class="form-group">
@@ -44,13 +45,12 @@
           <label for="ticket-price">Ticket Price:</label>
           <input type="number" id="ticket-price" placeholder="Example: 150" required>
         </div>
-
         <div class="buttons">
           <button type="submit" id="btn-create" class="btn-create">Create</button>
           <button type="button" id="btn-update" class="btn-update" style="display: none;">Update</button>
         </div>
-      </form>
-    </div>
+        </form>
+        </div>
 
     <table id="schedule-table">
       <thead>
@@ -69,5 +69,6 @@
   </div>
 
   <script src="form.js" type="module"></script>
+  <script src="validation.js"></script>
 </body>
 </html>
