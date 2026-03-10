@@ -55,7 +55,8 @@ export function bookTickets(schedule, numberOfTickets = 1) {
   }
 
   updateScheduleInStorage(updatedSchedule);
-
+  saveBookingToHistory(updatedSchedule, numberOfTickets);
+  
   return {
     success: true,
     message: `Booking successful! ${numberOfTickets} ticket(s) booked. Remaining seats: ${updatedSchedule.availableSeats}`,
@@ -81,4 +82,22 @@ function updateScheduleInStorage(updatedSchedule) {
 export function getScheduleById(scheduleId) {
   const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
   return schedules.find(s => s.id === scheduleId);
+}
+
+function saveBookingToHistory(schedule, numberOfTickets){
+
+const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+const booking = {
+id: Date.now(),
+train: schedule.trainName || "Train",
+date: schedule.departureTime || new Date().toLocaleDateString(),
+seat: numberOfTickets,
+status: "Confirmed"
+};
+
+bookings.push(booking);
+
+localStorage.setItem("bookings", JSON.stringify(bookings));
+
 }
