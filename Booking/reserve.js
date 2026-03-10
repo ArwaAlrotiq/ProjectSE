@@ -7,5 +7,9 @@ document.getElementById("reserve-btn").addEventListener("click", () => {
   const schedule = getScheduleById(scheduleId);
   const result = bookTickets(schedule, tickets);
 
-  alert(result.message);
+ if (!result.success) {
+    alert(result.message);
+ }else {
+    alert(result.message);
+}
 });
