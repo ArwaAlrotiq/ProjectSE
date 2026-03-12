@@ -22,8 +22,7 @@ function selectRole(card, role) {
 
     card.classList.add("selected");
     selectedRole = role;
-
-    localStorage.setItem("role", role);
+    sessionStorage.setItem("role", role);
 }
 
 // Moves from role selection to login form
@@ -35,9 +34,22 @@ function goNext() {
         return;
     }
 
-    document.getElementById("role-gateway").style.display = "none";
-    document.getElementById("login-form").style.display = "block";
-
-    document.getElementById("role-display").innerText =
-        "Selected Role: " + selectedRole;
+    if (selectedRole === "admin") {
+        window.location.href = "admin-dashboard.html";
+    }
+    if (selectedRole === "manager") {
+        window.location.href = "manager-dashboard.html";
+    }
+    if (selectedRole === "staff") {
+        window.location.href = "staff-dashboard.html";
+    }
 }
+window.addEventListener("load", () => {
+    const role = sessionStorage.getItem("role");
+    if (!role) {
+        alert("No role selected. Please choose your role first.");
+        window.location.href = "login.html";
+    } else {
+        console.log("Logged in as:", role);
+    }
+});
