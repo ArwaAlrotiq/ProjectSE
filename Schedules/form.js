@@ -5,10 +5,11 @@ const tripNameInput = document.getElementById('trip-name');
 const departureTimeInput = document.getElementById('departure-time');
 const destinationInput = document.getElementById('destination');
 const tripIdInput = document.getElementById('trip-id');
-
+const capacity = document.getElementById("seat-capacity");
+const price = document.getElementById("ticket-price");
 const btnCreate = document.getElementById('btn-create');
 const btnUpdate = document.getElementById('btn-update');
-const tableBody = document.getElementById('table-body');
+const tableBody = document.getElementById('schedule body');
 
 function loadSchedules() {
   const stored = localStorage.getItem('trainSchedules');
@@ -47,7 +48,7 @@ function renderTable() {
   tableBody.innerHTML = '';
   
   if (schedules.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="4" class="empty-message">No trips available.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="6" class="empty-message">No trips available.</td></tr>`;
     return;
   }
   
@@ -58,6 +59,8 @@ function renderTable() {
       <td>${schedule.tripName}</td>
       <td>${schedule.departureTime}</td>
       <td>${schedule.destination}</td>
+      <td>${schedule.ticketPrice}</td>
+      <td>${schedule.seatCapacity}</td>
       <td>
         <button class="btn-delete" onclick="deleteSchedule('${schedule.id}')">Delete</button>
         <button class="btn-edit" onclick="editSchedule('${schedule.id}')">Edit / Update</button>
@@ -74,7 +77,9 @@ form.addEventListener('submit', function(e) {
   const newSchedule = {
     tripName: tripNameInput.value,
     departureTime: departureTimeInput.value,
-    destination: destinationInput.value
+    destination: destinationInput.value,
+    ticketPrice: price.value,
+    seatCapacity: capacity.value 
   };
   
   createSchedule(newSchedule);
