@@ -114,8 +114,7 @@ button {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin : auto;
-  margin-top: 20px;
+  margin: 20px auto 0;
   border-radius: 8px;
   overflow: hidden;
 }

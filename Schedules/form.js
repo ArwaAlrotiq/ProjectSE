@@ -3,13 +3,14 @@ let schedules = [];
 const form = document.getElementById('schedule-form');
 const tripNameInput = document.getElementById('trip-name');
 const departureTimeInput = document.getElementById('departure-time');
+const arrivalTimeInput = document.getElementById('arrival-time');
 const destinationInput = document.getElementById('destination');
 const tripIdInput = document.getElementById('trip-id');
 const capacity = document.getElementById("seat-capacity");
 const price = document.getElementById("ticket-price");
 const btnCreate = document.getElementById('btn-create');
 const btnUpdate = document.getElementById('btn-update');
-const tableBody = document.getElementById('schedule body');
+const tableBody = document.getElementById('schedule-body');
 
 function loadSchedules() {
   const stored = localStorage.getItem('trainSchedules');
@@ -48,7 +49,7 @@ function renderTable() {
   tableBody.innerHTML = '';
   
   if (schedules.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="6" class="empty-message">No trips available.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="7" class="empty-message">No trips available.</td></tr>`;
     return;
   }
   
@@ -58,6 +59,7 @@ function renderTable() {
     row.innerHTML = `
       <td>${schedule.tripName}</td>
       <td>${schedule.departureTime}</td>
+      <td>${schedule.arrivalTime}</td>
       <td>${schedule.destination}</td>
       <td>${schedule.ticketPrice}</td>
       <td>${schedule.seatCapacity}</td>
@@ -77,6 +79,7 @@ form.addEventListener('submit', function(e) {
   const newSchedule = {
     tripName: tripNameInput.value,
     departureTime: departureTimeInput.value,
+    arrivalTime: arrivalTimeInput.value,
     destination: destinationInput.value,
     ticketPrice: price.value,
     seatCapacity: capacity.value 
@@ -91,7 +94,10 @@ window.editSchedule = function(id) {
   if (schedule) {
     tripNameInput.value = schedule.tripName;
     departureTimeInput.value = schedule.departureTime;
+    arrivalTimeInput.value = schedule.arrivalTime;
     destinationInput.value = schedule.destination;
+    price.value = schedule.ticketPrice;
+    capacity.value = schedule.seatCapacity;
     tripIdInput.value = schedule.id;
     
     btnCreate.style.display = 'none';
@@ -106,7 +112,10 @@ btnUpdate.addEventListener('click', function() {
   const updatedData = {
     tripName: tripNameInput.value,
     departureTime: departureTimeInput.value,
-    destination: destinationInput.value
+    arrivalTime: arrivalTimeInput.value,
+    destination: destinationInput.value,
+    ticketPrice: price.value,
+    seatCapacity: capacity.value
   };
   
   updateSchedule(id, updatedData);

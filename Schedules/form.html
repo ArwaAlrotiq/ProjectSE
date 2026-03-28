@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Train Schedules Management and schedule list </title>
-
+  <title>Train Schedules Management and schedule list</title>
   <link rel="stylesheet" href="form.css">
 </head>
 
@@ -49,23 +48,25 @@
           <button type="submit" id="btn-create" class="btn-create">Create</button>
           <button type="button" id="btn-update" class="btn-update" style="display: none;">Update</button>
         </div>
-        </form>
-        </div>
+      </form>
+    </div>
 
-        <h2> Train schedule list </h2>
-        <table id="schedule-table">
-            <thead>
-                <tr>
-                    <th> Trip Name </th>
-                    <th> Departure Time </th>
-                    <th> Destination </th>
-                    <th> Ticket price </th>
-                    <th> Seat capacity </th>
-                    <th> Actions </th>
-                </tr>
-            </thead>
-            <tbody id="schedule body"></tbody>
-        </table>
+    <h2>Train schedule list</h2>
+
+    <table id="schedule-table">
+      <thead>
+        <tr>
+          <th>Trip Name</th>
+          <th>Departure Time</th>
+          <th>Arrival Time</th>
+          <th>Destination</th>
+          <th>Ticket Price</th>
+          <th>Seat Capacity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="schedule-body"></tbody>
+    </table>
   </div>
 
   <script src="form.js" type="module"></script>
