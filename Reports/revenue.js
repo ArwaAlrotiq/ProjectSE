@@ -50,7 +50,7 @@ function calculateTotalRevenueForDuration(startDay, endDay) {
 
     bookings.forEach(booking => {
         const train = booking.trip || "Unknown";
-        const dailyRevenue = booking.dailyRevenue || []; // لو عندك الإيرادات اليومية
+        const dailyRevenue = booking.dailyRevenue || [];
         const revenue = dailyRevenue.slice(startDay, endDay+1).reduce((a,b)=>a+b,0) || booking.totalPrice || 0;
 
         if (!revenueByTrain[train]) revenueByTrain[train] = 0;
