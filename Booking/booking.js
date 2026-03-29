@@ -9,10 +9,6 @@ function restoreData() {
     alert("Data restored successfully!");
 }
 
-/**
- * Booking Management Module
- * Handles seat decrement after successful booking
- */
 export function checkAvailability(schedule) {
   if (!schedule) {
     console.error('Schedule not found');
@@ -77,7 +73,7 @@ export function bookTickets(schedule, numberOfTickets = 1) {
   };
 }
 
-function updateScheduleInStorage(updatedSchedule) {
+export function updateScheduleInStorage(updatedSchedule) {
   const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
   const index = schedules.findIndex(s => s.id === updatedSchedule.id);
   if (index !== -1) {
@@ -102,39 +98,4 @@ function saveBookingToHistory(schedule, numberOfTickets) {
   };
   bookings.push(booking);
   localStorage.setItem("bookings", JSON.stringify(bookings));
-}
-
-// ================================
-// S10: Transactional Integrity & Rollback 
-// ================================
-export function bookWithRollback(scheduleId, numberOfTickets = 1) {
-  // Step 1: Get current state (backup)
-  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
-  const backupSchedules = JSON.stringify(schedules);
-  const backupBookings = localStorage.getItem("bookings");
-
-  try {
-    // Step 2: Get the schedule
-    const schedule = getScheduleById(scheduleId);
-    if (!schedule) {
-      throw new Error("Schedule not found");
-    }
-
-    // Step 3: Try to book
-    const result = bookTickets(schedule, numberOfTickets);
-    if (!result.success) {
-      throw new Error(result.message);
-    }
-
-    // Step 4: Success
-    return { success: true, message: result.message };
-
-  } catch (error) {
-    // Step 5: Something went wrong — rollback everything
-    localStorage.setItem('trainSchedules', backupSchedules);
-    if (backupBookings) {
-      localStorage.setItem("bookings", backupBookings);
-    }
-    return { success: false, message: "Booking failed: " + error.message };
-  }
 }
