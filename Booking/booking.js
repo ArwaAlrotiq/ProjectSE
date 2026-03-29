@@ -13,6 +13,10 @@ function restoreData() {
  * Booking Management Module
  * Handles seat decrement after successful booking
  */
+
+// ================================
+// Check seat availability
+// ================================
 export function checkAvailability(schedule) {
   if (!schedule) {
     console.error('Schedule not found');
@@ -27,6 +31,9 @@ export function checkAvailability(schedule) {
   return { available: true, message: 'Seats available' };
 }
 
+// ================================
+// Book tickets
+// ================================
 export function bookTickets(schedule, numberOfTickets = 1) {
   if (numberOfTickets <= 0) {
     return {
@@ -48,7 +55,7 @@ export function bookTickets(schedule, numberOfTickets = 1) {
   if (numberOfTickets > schedule.availableSeats) {
     return {
       success: false,
-      message: `Available seats (${schedule.availableSeats}) is less than requested tickets (${numberOfTickets})`,
+      message: `Not enough seats. Available: ${schedule.availableSeats}`,
       schedule: schedule
     };
   }
