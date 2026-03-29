@@ -2,6 +2,7 @@
  * Cancellation Management Module
  * Handles seat increment after booking cancellation
  */
+import { updateScheduleInStorage, getScheduleById } from './booking.js';
 
 function checkMaxCapacity(schedule, additionalSeats) {
   const maxCapacity = schedule.maxCapacity || schedule.totalSeats;
@@ -69,21 +70,6 @@ export function cancelBooking(schedule, numberOfTickets = 1) {
       cancellationTime: new Date().toISOString()
     }
   };
-}
-
-function updateScheduleInStorage(updatedSchedule) {
-  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
-  const index = schedules.findIndex(s => s.id === updatedSchedule.id);
-  
-  if (index !== -1) {
-    schedules[index] = updatedSchedule;
-    localStorage.setItem('trainSchedules', JSON.stringify(schedules));
-  }
-}
-
-export function getScheduleById(scheduleId) {
-  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
-  return schedules.find(s => s.id === scheduleId);
 }
 
 export function getRemainingSeats(schedule) {

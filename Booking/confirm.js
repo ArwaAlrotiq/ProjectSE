@@ -1,4 +1,5 @@
-import { getScheduleById, cancelBooking } from './cancellation.js';
+import { cancelBooking } from './cancellation.js';
+import { getScheduleById } from './booking.js';
 
 document.getElementById("cancel-btn").addEventListener("click", () => {
   const scheduleId = selectedTrainId; 
