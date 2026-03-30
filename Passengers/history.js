@@ -12,7 +12,7 @@ function loadHistory() {
 
   if (bookings.length === 0) {
     const row = document.createElement("tr");
-    row.innerHTML = <td colspan="5">No booking history found</td>;
+    row.innerHTML = '<td colspan="5">No booking history found</td>';
     tableBody.appendChild(row);
     return;
   }
