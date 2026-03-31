@@ -1,14 +1,11 @@
 // S24: Restore data functionality
 function restoreData() {
     const savedBookings = JSON.parse(localStorage.getItem("savedBookings")) || [];
-
     if(savedBookings.length === 0) {
         alert("No saved data to restore.");
         return;
     }
-
     localStorage.setItem("bookings", JSON.stringify(savedBookings));
-
     alert("Data restored successfully!");
 }
 
@@ -17,14 +14,12 @@ export function checkAvailability(schedule) {
     console.error('Schedule not found');
     return { available: false, message: 'Schedule not found' };
   }
-
   if (schedule.availableSeats <= 0) {
     return { 
       available: false, 
       message: 'Sorry, this trip is sold out. No seats available.' 
     };
   }
-
   return { available: true, message: 'Seats available' };
 }
 
@@ -78,10 +73,9 @@ export function bookTickets(schedule, numberOfTickets = 1) {
   };
 }
 
-function updateScheduleInStorage(updatedSchedule) {
+export function updateScheduleInStorage(updatedSchedule) {
   const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
   const index = schedules.findIndex(s => s.id === updatedSchedule.id);
-  
   if (index !== -1) {
     schedules[index] = updatedSchedule;
     localStorage.setItem('trainSchedules', JSON.stringify(schedules));
@@ -93,20 +87,15 @@ export function getScheduleById(scheduleId) {
   return schedules.find(s => s.id === scheduleId);
 }
 
-function saveBookingToHistory(schedule, numberOfTickets){
-
-const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-
-const booking = {
-id: Date.now(),
-train: schedule.trainName || "Train",
-date: schedule.departureTime || new Date().toLocaleDateString(),
-seat: numberOfTickets,
-status: "Confirmed"
-};
-
-bookings.push(booking);
-
-localStorage.setItem("bookings", JSON.stringify(bookings));
-
+function saveBookingToHistory(schedule, numberOfTickets) {
+  const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+  const booking = {
+    id: Date.now(),
+    train: schedule.trainName || "Train",
+    date: schedule.departureTime || new Date().toLocaleDateString(),
+    seat: numberOfTickets,
+    status: "Confirmed"
+  };
+  bookings.push(booking);
+  localStorage.setItem("bookings", JSON.stringify(bookings));
 }
