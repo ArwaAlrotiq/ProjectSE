@@ -44,12 +44,13 @@ function goNext() {
         window.location.href = "staff-dashboard.html";
     }
 }
-window.addEventListener("load", () => {
-    const role = sessionStorage.getItem("role");
-    if (!role) {
-        alert("No role selected. Please choose your role first.");
-        window.location.href = "login.html";
-    } else {
-        console.log("Logged in as:", role);
+function nextButton() {
+    if (!selectedRole) {
+        alert("Please select a role first!");
+        return;
     }
-});
+    document.getElementById('role-gateway').style.display = 'none';
+    const loginForm = document.getElementById('login-form');
+    loginForm.style.display = 'block';
+    document.getElementById('role-display').innerText = "Logging in as: " + selectedRole;
+}

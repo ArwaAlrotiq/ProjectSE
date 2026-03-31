@@ -1,5 +1,4 @@
 // S24: Restore data functionality
-
 function restoreData() {
     const savedBookings = JSON.parse(localStorage.getItem("savedBookings")) || [];
 
@@ -12,10 +11,6 @@ function restoreData() {
 
     alert("Data restored successfully!");
 }
-/**
- * Booking Management Module
- * Handles seat decrement after successful booking
- */
 
 export function checkAvailability(schedule) {
   if (!schedule) {

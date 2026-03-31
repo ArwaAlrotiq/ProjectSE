@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Train System Login</title>
+    <title>Role based & Train System Login</title>
     <link rel="stylesheet" href="login.css">
 </head>
 <body>
@@ -24,7 +24,8 @@
             </div>
         </div>
 
-        <button class="next-btn" onclick="goNext()">Next</button>
+        <button class="next-btn" onclick="nextButton()">Next</button>
+        
     </div>
 
     <div class="login-container" id="login-form" style="display:none;">
@@ -45,6 +46,7 @@
         </div>
 
         <button onclick="handleLogin()">Login</button>
+        <button onclick="backButtn()">Back</button>
     </div>
 
     <script src="role-gateway.js"></script>
