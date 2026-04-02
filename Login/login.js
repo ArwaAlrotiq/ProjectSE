@@ -26,4 +26,25 @@ function handleLogin() {
         errorDiv.classList.remove("hidden");
         errorDiv.textContent = "Invalid username or password.";
     }
+    if (result.success) {
+        sessionStorage.setItem("currentUser", JSON.stringify(result.user));
+        const userRole = result.user.role;
+        sessionStorage.setItem("userRole", userRole);
+        if (userRole === "administrator") {
+            window.location.href = "../Schedules/form.html";
+        } else {
+            window.location.href = result.redirect || "staff-dashboard.html";
+        }
+
+    } else {
+        errorDiv.classList.remove("hidden");
+        errorDiv.textContent = "Invalid username or password.";
+    }
+}
+function backButtn() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('role-gateway').style.display = 'block';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('error-msg').classList.add('hidden');
 }
