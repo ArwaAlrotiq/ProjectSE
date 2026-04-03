@@ -57,13 +57,13 @@ Each module contains its own HTML, CSS, and JavaScript files.
 * Authentication & User Roles
 The system includes predefined users:
 
-      | Username | Password | Role | Redirect Page |
+      | Username | Password | Role 
 
-      | admin | admin123 | administrator | Schedules Page |
+      | admin | admin123 | administrator 
 
-      | agent | agent123 | reservation_agent | Booking Page |
+      | agent | agent123 | reservation_agent 
 
-      | manager | manager123 | manager | Dashboard Page |
+      | manager | manager123 | manager 
 
 
 <br>
