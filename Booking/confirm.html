@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancel Reservation</title>
+    <link rel="stylesheet" href="confirm.css">
+</head>
+<body>
+    <div class="confirmation-container">
+        <h1>Cancel Booking</h1>
+        <p>Enter how many tickets to cancel</p>
+        
+        <label for="ticket-count">Number of Tickets:</label>
+        <input type="number" id="ticket-count" value="1" min="1">
+        
+        <button id="cancel-btn">Confirm Cancellation</button>
+    </div>
+
+    <script>
+        var selectedTrainId = "1"; 
+    </script>
+    <script type="module" src="confirm.js"></script>
+</body>
+</html>
