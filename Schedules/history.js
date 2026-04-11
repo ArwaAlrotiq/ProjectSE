@@ -1,26 +1,74 @@
-const today=new Date();
-const allSchedules=[{id: "TR-101", route:"Riyadh - Dammam", date:"2024-05-10", status:"completed"},
-    {id: "TR-102", route:"Jeddah - Makkah", date:"2025-11-10", status:"completed"},
-    {id: "TR-103", route:"Dammam - Riyadh", date:"2027-01-01", status:"upcoming"},
-    {id: "TR-104", route:"Dammam - Riyadh", date:"2024-01-01", status:"cancelled"}
-];
-const tableBody=document.getElementById("tableBody");
-allSchedules.forEach(train => {
-    const trainDate=new Date(train.date);
-    if(trainDate< today){
-        let statusColor=" ";
-        if(train.status.toLowerCase()==="completed"){
-            statusColor="green";
-        }else {
-            statusColor="red";
-        }
-        const row=`<tr>
-        <td>${train.id}</td>
-        <td>${train.route}</td>
-        <td>${train.date}</td>
-        <td>--:--</td>       
-        <td style="color: ${statusColor}; font-weight: bold;">${train.status}</td>
-        </tr>`;
-        tableBody.innerHTML +=row;
-    }       
-});
+// Load historical schedules only
+document.addEventListener("DOMContentLoaded", displayHistoricalSchedules);
+
+// ===============================
+// Display Historical Schedules
+// ===============================
+function displayHistoricalSchedules() {
+    const schedules = JSON.parse(localStorage.getItem("historicalSchedules")) || [];
+    const tableBody = document.getElementById("historicalTableBody");
+    const noDataMessage = document.getElementById("noDataMessage");
+
+    tableBody.innerHTML = "";
+
+    if (schedules.length === 0) {
+        noDataMessage.textContent = "No historical records found.";
+        return;
+    } else {
+        noDataMessage.textContent = "";
+    }
+
+    schedules.forEach(schedule => {
+        const row = `
+            <tr>
+                <td>${schedule.trainName}</td>
+                <td>${schedule.route}</td>
+                <td>${schedule.departure}</td>
+                <td>${schedule.arrival}</td>
+                <td>${schedule.price}</td>
+                <td>${schedule.capacity}</td>
+                <td>${schedule.status || "Completed"}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
+
+// ===============================
+// Search Historical Schedules
+// ===============================
+function searchHistoricalSchedules() {
+    const query = document.getElementById("searchTrain").value.toLowerCase();
+    const schedules = JSON.parse(localStorage.getItem("historicalSchedules")) || [];
+
+    const filtered = schedules.filter(schedule =>
+        schedule.trainName.toLowerCase().includes(query)
+    );
+
+    const tableBody = document.getElementById("historicalTableBody");
+    const noDataMessage = document.getElementById("noDataMessage");
+
+    tableBody.innerHTML = "";
+
+    if (filtered.length === 0) {
+        noDataMessage.textContent = "No matching records found.";
+        return;
+    } else {
+        noDataMessage.textContent = "";
+    }
+
+    filtered.forEach(schedule => {
+        const row = `
+            <tr>
+                <td>${schedule.trainName}</td>
+                <td>${schedule.route}</td>
+                <td>${schedule.departure}</td>
+                <td>${schedule.arrival}</td>
+                <td>${schedule.price}</td>
+                <td>${schedule.capacity}</td>
+                <td>${schedule.status || "Completed"}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}

@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>
-            Past schedules - Admin
-        </title>
-        <link rel="stylesheet" href="history.css">
-    </head>
-    <body>
-        <h1>Historical Train Schedules</h1>
-        <div id="search-section"></div>
-        <table border="1" id="historyTable">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Train Schedules - Admin</title>
+    <link rel="stylesheet" href="history.css">
+</head>
+
+<body>
+
+    <h1>Historical Train Schedules</h1>
+
+    <div class="container">
+
+        <!-- Search Section -->
+        <div class="search-bar">
+            <input type="text" id="searchTrain" placeholder="Search by Train Name..."
+                onkeyup="searchHistoricalSchedules()">
+        </div>
+
+        <!-- Table -->
+        <table id="historyTable" border="1">
             <thead>
                 <tr>
-                    <th>Train ID</th>
+                    <th>Train Name</th>
                     <th>Route</th>
                     <th>Departure Time</th>
-                    <th>Arraival time</th>
+                    <th>Arrival Time</th>
+                    <th>Price (SAR)</th>
+                    <th>Seat Capacity</th>
                     <th>Status</th>
                 </tr>
             </thead>
-            <tbody id="tableBody"></tbody>
+            <tbody id="historicalTableBody"></tbody>
         </table>
-        <script src="history.js"></script>
-    </body>
+
+        <p id="noDataMessage" class="no-data"></p>
+
+    </div>
+
+    <script src="history.js"></script>
+</body>
+
 </html>
