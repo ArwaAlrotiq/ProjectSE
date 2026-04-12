@@ -1,10 +1,12 @@
+/* ============================================================
+   AUTH CHECK
+============================================================ */
 import { checkAuth } from '../Login/auth.js';
 checkAuth();
 
-// ================================
-// Calculate utilization percentage
-// for each train
-// ================================
+/* ============================================================
+   UTILIZATION CALCULATION (from main)
+============================================================ */
 function calculateUtilization() {
   const schedules = JSON.parse(localStorage.getItem('trainSchedules')) || [];
   const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
@@ -31,19 +33,18 @@ function calculateUtilization() {
   return utilizationData;
 }
 
-// ================================
-// Determine utilization level
-// ================================
+/* ============================================================
+   UTILIZATION LEVEL COLORS
+============================================================ */
 function getUtilizationLevel(percentage) {
   if (percentage >= 75) return 'high';
   if (percentage >= 40) return 'medium';
   return 'low';
 }
 
-// ================================
-// Render utilization table
-// with color highlights
-// ================================
+/* ============================================================
+   RENDER UTILIZATION TABLE (from main)
+============================================================ */
 function renderUtilizationTable() {
   const data = calculateUtilization();
   const container = document.getElementById('utilization-table');
@@ -84,7 +85,33 @@ function renderUtilizationTable() {
   `;
 }
 
-// ================================
-// Run on load
-// ================================
+/* ============================================================
+   OCCUPANCY CALCULATION (from S14)
+============================================================ */
+function getCalculatedOccupancy() {
+    const occupancyData = JSON.parse(localStorage.getItem('occupancy')) || {};
+    const schedules = JSON.parse(localStorage.getItem('trainSchedules')) || [];
+    
+    let results = [];
+
+    for (let trainName in occupancyData) {
+        let reserved = occupancyData[trainName];
+        const trainInfo = schedules.find(t => t.trainName === trainName);
+        let total = trainInfo && trainInfo.maxCapacity ? trainInfo.maxCapacity : 100;
+        let percentage = ((reserved / total) * 100).toFixed(1);
+
+        results.push({
+            trainName: trainName,
+            occupancyRate: percentage,
+            reservedSeats: reserved,
+            capacity: total
+        });
+    }
+
+    return results;
+}
+
+/* ============================================================
+   RUN ON LOAD
+============================================================ */
 renderUtilizationTable();

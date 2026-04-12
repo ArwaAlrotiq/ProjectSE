@@ -1,9 +1,19 @@
+/* ================================
+   Dashboard Initialization
+================================ */
 function initDashboard() {
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
     const schedules = JSON.parse(localStorage.getItem("trainSchedules")) || [];
 
     updateSummaryCards(bookings, schedules.length);
+    renderUtilizationCharts(bookings, schedules);
+    updateOccupancy(); // from S14
+}
 
+/* ================================
+   Render Train Utilization Charts
+================================ */
+function renderUtilizationCharts(bookings, schedules) {
     const chartsContainer = document.getElementById("chartsContainer");
     chartsContainer.innerHTML = "";
 
@@ -30,6 +40,9 @@ function initDashboard() {
     });
 }
 
+/* ================================
+   Doughnut Chart Renderer
+================================ */
 function renderDoughnut(id, booked, total, percent) {
     const ctx = document.getElementById(id).getContext("2d");
     const empty = Math.max(0, total - booked);
@@ -54,6 +67,9 @@ function renderDoughnut(id, booked, total, percent) {
     });
 }
 
+/* ================================
+   Summary Cards (Top Section)
+================================ */
 function updateSummaryCards(bookings, trainCount) {
     let revenue = 0;
     let confirmedCount = 0;
@@ -68,4 +84,31 @@ function updateSummaryCards(bookings, trainCount) {
     document.getElementById("totalTrains").textContent = trainCount;
     document.getElementById("totalBookings").textContent = confirmedCount;
     document.getElementById("totalRevenue").textContent = revenue + " SAR";
+}
+
+/* ================================
+   OCCUPANCY SECTION (from S14)
+================================ */
+window.addEventListener('DOMContentLoaded', () => {
+    updateOccupancy();
+});
+
+function updateOccupancy() {
+    let occupancyData = JSON.parse(localStorage.getItem('occupancy')) || {};
+    const container = document.getElementById('occupancy-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    for (let train in occupancyData) {
+        let p = document.createElement('p');
+        p.textContent = `${train}: ${occupancyData[train]} seats occupied`;
+        container.appendChild(p);
+    }
+}
+
+function bookSeat(train, seats) {
+    let occupancyData = JSON.parse(localStorage.getItem('occupancy')) || {};
+    occupancyData[train] = (occupancyData[train] || 0) + seats;
+    localStorage.setItem('occupancy', JSON.stringify(occupancyData));
 }
