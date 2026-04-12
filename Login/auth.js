@@ -47,35 +47,6 @@ function checkAuth() {
     }
     return JSON.parse(user);
 }
-async function handleSignup() {
-    const username = document.getElementById('signupUsername').value;
-    const password = document.getElementById('signupPassword').value;
 
-    if (!username || !password) {
-        alert("Please fill both username and password");
-        return;
-    }
-
-    const encryptedPassword = await encryptPassword(password);
-    localStorage.setItem(`user_${username}`, encryptedPassword);
-    alert('Sign Up Successful!');
-}
-
-async function handleLogin() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    if (!username || !password) {
-        alert("Please fill both username and password");
-        return;
-    }
-
-    const encryptedPassword = await encryptPassword(password);
-    const storedPassword = localStorage.getItem(`user_${username}`);
-
-    if (storedPassword && storedPassword === encryptedPassword) {
-        alert('Login Successful!');
-    } else {
-        alert('Invalid username or password');
-    }
-}
+// Export functions so modules can import them
+export { checkAuth, checkLogin };
