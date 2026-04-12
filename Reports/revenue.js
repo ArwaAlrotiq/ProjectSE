@@ -1,10 +1,9 @@
 import { checkAuth } from '../Login/auth.js';
 checkAuth();
 
-// ================================
-// Calculate revenue per train
-// from confirmed bookings
-// ================================
+/**
+ * Calculate revenue per train from confirmed bookings
+ */
 function calculateRevenuePerTrain() {
   const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
 
@@ -25,10 +24,9 @@ function calculateRevenuePerTrain() {
   return revenueByTrain;
 }
 
-// ================================
-// Calculate total revenue
-// for a selected duration
-// ================================
+/**
+ * Calculate total revenue for a selected date range
+ */
 function calculateTotalRevenueForDuration(startDate, endDate) {
   const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
 
@@ -49,10 +47,9 @@ function calculateTotalRevenueForDuration(startDate, endDate) {
   return total;
 }
 
-// ================================
-// Display revenue per train
-// in a chart
-// ================================
+/**
+ * Render revenue per train chart
+ */
 function renderRevenueChart() {
   const data = calculateRevenuePerTrain();
   const labels = Object.keys(data);
@@ -80,7 +77,7 @@ function renderRevenueChart() {
   });
 }
 
-// ================================
-// Run on load
-// ================================
+/**
+ * Run on page load
+ */
 renderRevenueChart();

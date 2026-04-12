@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="initDashboard()">
+
+    <h2 style="margin-top: 30px;">System Summary Dashboard</h2>
+
+    <div class="summary-container">
+        <div class="card">
+            <h3>Total Trains</h3>
+            <p id="totalTrains">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Bookings</h3>
+            <p id="totalBookings">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Revenue</h3>
+            <p id="totalRevenue">0 SAR</p>
+        </div>
+    </div>
+
+    <hr style="width: 80%; margin: 40px auto; border: 0.5px solid #ccc;">
+
+    <h2>Train Utilization</h2>
+
+    <div id="chartsContainer" class="charts-grid-container"></div>
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
