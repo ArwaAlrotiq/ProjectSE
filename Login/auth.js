@@ -47,6 +47,3 @@ function checkAuth() {
     }
     return JSON.parse(user);
 }
-
-// Export functions so modules can import them
-export { checkAuth, checkLogin };
