@@ -1,11 +1,11 @@
 let schedules = [];
 
 const form = document.getElementById('schedule-form');
-const tripNameInput = document.getElementById('trip-name');
+const trainNameInput = document.getElementById('train-name');
 const departureTimeInput = document.getElementById('departure-time');
 const arrivalTimeInput = document.getElementById('arrival-time');
 const destinationInput = document.getElementById('destination');
-const tripIdInput = document.getElementById('trip-id');
+const trainIdInput = document.getElementById('train-id');
 const capacity = document.getElementById("seat-capacity");
 const price = document.getElementById("ticket-price");
 const btnCreate = document.getElementById('btn-create');
@@ -38,7 +38,7 @@ function updateSchedule(id, updatedData) {
 }
 
 window.deleteSchedule = function(id) {
-  if (confirm("Are you sure you want to delete this trip?")) {
+  if (confirm("Are you sure you want to delete this train?")) {
     schedules = schedules.filter(s => s.id !== id);
     saveSchedules();
     renderTable();
@@ -49,7 +49,7 @@ function renderTable() {
   tableBody.innerHTML = '';
   
   if (schedules.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="7" class="empty-message">No trips available.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="7" class="empty-message">No trains available.</td></tr>`;
     return;
   }
   
@@ -57,7 +57,7 @@ function renderTable() {
     const row = document.createElement('tr');
     
     row.innerHTML = `
-      <td>${schedule.tripName}</td>
+      <td>${schedule.trainName}</td>
       <td>${schedule.departureTime}</td>
       <td>${schedule.arrivalTime}</td>
       <td>${schedule.destination}</td>
@@ -77,7 +77,7 @@ form.addEventListener('submit', function(e) {
   e.preventDefault();
   
   const newSchedule = {
-    tripName: tripNameInput.value,
+    trainName: trainNameInput.value,
     departureTime: departureTimeInput.value,
     arrivalTime: arrivalTimeInput.value,
     destination: destinationInput.value,
@@ -92,13 +92,13 @@ form.addEventListener('submit', function(e) {
 window.editSchedule = function(id) {
   const schedule = schedules.find(s => s.id === id);
   if (schedule) {
-    tripNameInput.value = schedule.tripName;
+    trainNameInput.value = schedule.trainName;
     departureTimeInput.value = schedule.departureTime;
     arrivalTimeInput.value = schedule.arrivalTime;
     destinationInput.value = schedule.destination;
     price.value = schedule.ticketPrice;
     capacity.value = schedule.seatCapacity;
-    tripIdInput.value = schedule.id;
+    trainIdInput.value = schedule.id;
     
     btnCreate.style.display = 'none';
     btnUpdate.style.display = 'inline-block';
@@ -106,11 +106,11 @@ window.editSchedule = function(id) {
 };
 
 btnUpdate.addEventListener('click', function() {
-  const id = tripIdInput.value;
+  const id = trainIdInput.value;
   if (!id) return;
   
   const updatedData = {
-    tripName: tripNameInput.value,
+    trainName: trainNameInput.value,
     departureTime: departureTimeInput.value,
     arrivalTime: arrivalTimeInput.value,
     destination: destinationInput.value,
@@ -121,7 +121,7 @@ btnUpdate.addEventListener('click', function() {
   updateSchedule(id, updatedData);
   
   form.reset();
-  tripIdInput.value = '';
+  trainIdInput.value = '';
   btnCreate.style.display = 'inline-block';
   btnUpdate.style.display = 'none';
 });

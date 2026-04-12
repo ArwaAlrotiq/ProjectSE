@@ -13,11 +13,11 @@
     
     <div class="form-container">
       <form id="schedule-form" onsubmit="return validate()">
-        <input type="hidden" id="trip-id">
+        <input type="hidden" id="train-id">
         
         <div class="form-group">
-          <label for="trip-name">Trip Name:</label>
-          <input type="text" id="trip-name" placeholder="Example: Riyadh - Dammam Train" required>
+          <label for="train-name">Train Name:</label>
+          <input type="text" id="train-name" placeholder="Example: Riyadh - Dammam Train" required>
         </div>
         
         <div class="form-group">
@@ -57,7 +57,7 @@
     <table id="schedule-table">
       <thead>
         <tr>
-          <th>Trip Name</th>
+          <th>Train Name</th>
           <th>Departure Time</th>
           <th>Arrival Time</th>
           <th>Destination</th>
