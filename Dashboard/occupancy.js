@@ -21,4 +21,3 @@ function getCalculatedOccupancy() {
     return results;
 }
 
-console.log("Kadi's Module: Data Analysis Ready", getCalculatedOccupancy());
