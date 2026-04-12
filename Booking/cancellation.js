@@ -1,13 +1,11 @@
-/**
- * Cancellation Management Module
- * Handles seat increment after booking cancellation
- */
-
+/* ============================================================
+   Imports
+============================================================ */
 import { updateScheduleInStorage, getScheduleById } from './booking.js';
 
-/**
- * Checks if adding seats after cancellation exceeds the maximum capacity
- */
+/* ============================================================
+   Max Capacity Check
+============================================================ */
 function checkMaxCapacity(schedule, additionalSeats) {
   const maxCapacity = schedule.maxCapacity || schedule.totalSeats;
   const newAvailableSeats = schedule.availableSeats + additionalSeats;
@@ -26,41 +24,30 @@ function checkMaxCapacity(schedule, additionalSeats) {
   };
 }
 
-/**
- * Cancels tickets and updates the schedule accordingly
- */
+/* ============================================================
+   Cancel Booking (Main Logic)
+============================================================ */
 export function cancelBooking(schedule, numberOfTickets = 1) {
   if (numberOfTickets <= 0) {
     return {
       success: false,
-      message: 'Number of tickets must be greater than zero',
-      schedule: schedule
+      message: 'Number of tickets must be greater than zero'
     };
   }
 
   if (!schedule) {
     return {
       success: false,
-      message: 'Schedule not found',
-      schedule: null
+      message: 'Schedule not found'
     };
   }
 
   const updatedSchedule = { ...schedule };
-
   const capacityCheck = checkMaxCapacity(updatedSchedule, numberOfTickets);
 
-  if (capacityCheck.exceedsMax) {
-    updatedSchedule.availableSeats = capacityCheck.adjustedSeats;
-    console.warn(capacityCheck.message);
-  } else {
-    updatedSchedule.availableSeats = capacityCheck.adjustedSeats;
-  }
+  updatedSchedule.availableSeats = capacityCheck.adjustedSeats;
 
-  // Update status if needed
   if (schedule.status === 'Sold Out' || schedule.status === 'Full') {
-    updatedSchedule.status = 'Available';
-  } else if (schedule.status !== 'Available') {
     updatedSchedule.status = 'Available';
   }
 
@@ -69,49 +56,77 @@ export function cancelBooking(schedule, numberOfTickets = 1) {
   return {
     success: true,
     message: `Successfully cancelled ${numberOfTickets} ticket(s)! Available seats now: ${updatedSchedule.availableSeats}`,
-    schedule: updatedSchedule,
-    cancellationDetails: {
-      ticketsCancelled: numberOfTickets,
-      availableSeatsAfterCancellation: updatedSchedule.availableSeats,
-      statusUpdated: schedule.status !== updatedSchedule.status,
-      newStatus: updatedSchedule.status,
-      cancellationTime: new Date().toISOString()
-    }
-  };
-}
-
-/**
- * Returns remaining seats and status information
- */
-export function getRemainingSeats(schedule) {
-  if (!schedule) {
-    return {
-      seats: 0,
-      status: 'Unknown'
-    };
-  }
-
-  return {
-    seats: schedule.availableSeats,
-    totalCapacity: schedule.maxCapacity || schedule.totalSeats,
-    status: schedule.status,
-    isSoldOut: schedule.availableSeats === 0
+    schedule: updatedSchedule
   };
 }
 
 /* ============================================================
+   Update Booking History
+============================================================ */
+function updateBookingHistory(bookingId, countToRemove) {
+  let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+  let found = false;
+  let message = "";
+
+  bookings = bookings.map(booking => {
+    if (booking.id == bookingId) {
+      found = true;
+
+      if (countToRemove > booking.seat) {
+        message = `You only have ${booking.seat} seats booked. Cannot cancel ${countToRemove}.`;
+        return booking;
+      }
+
+      booking.seat -= countToRemove;
+
+      if (booking.seat === 0) {
+        booking.status = "Cancelled";
+        message = "All seats cancelled successfully.";
+      } else {
+        message = `${countToRemove} seats cancelled. Remaining: ${booking.seat}`;
+      }
+    }
+    return booking;
+  });
+
+  if (!found) {
+    return { success: false, message: "Booking ID not found." };
+  }
+
+  if (message.includes("Cannot cancel")) {
+    return { success: false, message: message };
+  }
+
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+  return { success: true, message: message };
+}
+
+/* ============================================================
    Cancel Button Handler
-   ============================================================ */
-
-/**
- * Handles the cancellation button click event
- */
+============================================================ */
 document.getElementById("cancel-btn").addEventListener("click", () => {
-  const scheduleId = selectedTrainId;
-  const tickets = Number(document.getElementById("ticket-count").value);
+  const bookingIdInput = document.getElementById("booking-id-input").value.trim();
+  const ticketsToCancel = Number(document.getElementById("ticket-count").value);
 
+  if (!bookingIdInput || ticketsToCancel <= 0) {
+    alert("Please enter a valid Booking ID and number of tickets.");
+    return;
+  }
+
+  const scheduleId = typeof selectedTrainId !== "undefined" ? selectedTrainId : "1";
   const schedule = getScheduleById(scheduleId);
-  const result = cancelBooking(schedule, tickets);
 
-  alert(result.message);
+  const result = cancelBooking(schedule, ticketsToCancel);
+
+  if (result.success) {
+    const updateResult = updateBookingHistory(bookingIdInput, ticketsToCancel);
+
+    if (updateResult.success) {
+      alert(updateResult.message);
+    } else {
+      alert("Error: " + updateResult.message);
+    }
+  } else {
+    alert("Error: " + result.message);
+  }
 });

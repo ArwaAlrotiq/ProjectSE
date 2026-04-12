@@ -31,3 +31,50 @@ function loadHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", loadHistory);
+
+const sampleBookings = [
+    {
+        id: 101,
+        train: "Riyadh Express 505",
+        date: "2024-06-01",
+        seat: 3,
+        status: "Confirmed"
+    },
+    {
+        id: 102,
+        train: "Jeddah Train",
+        date: "2024-06-05",
+        seat: 1,
+        status: "Confirmed"
+    },
+    {
+        id: 103,
+        train: "Damam Train",
+        date: "2024-06-10",
+        seat: 2,
+        status: "Cancelled" 
+    }
+];
+
+const sampleSchedules = [
+    {
+        id: "1",
+        trainName: "Riyadh Express 505",
+        availableSeats: 45,
+        maxCapacity: 50,
+        status: "Available"
+    },
+    {
+        id: "2",
+        trainName: "Jeddah Train",
+        availableSeats: 99,
+        maxCapacity: 100,
+        status: "Available"
+    }
+];
+if (!localStorage.getItem('bookings')) {
+    localStorage.setItem('bookings', JSON.stringify(sampleBookings));
+}
+if (!localStorage.getItem('trainSchedules')) {
+    localStorage.setItem('trainSchedules', JSON.stringify(sampleSchedules));
+}

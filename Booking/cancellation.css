@@ -1,3 +1,6 @@
+/* ================================
+   General Page Styling
+================================ */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #fff5f5;
@@ -7,6 +10,10 @@ body {
     height: 100vh;
     margin: 0;
 }
+
+/* ================================
+   Container
+================================ */
 .confirmation-container {
     background: white;
     padding: 30px;
@@ -15,7 +22,79 @@ body {
     text-align: center;
     width: 320px;
 }
-h1 { color: #c0392b; margin-bottom: 10px; }
-input { width: 90%; padding: 12px; margin: 20px 0; border: 1px solid #ffdada; border-radius: 8px; font-size: 16px; }
-button { background-color: #e74c3c; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
-button:hover { background-color: #c0392b; }
+
+/* Title */
+h1 {
+    color: #c0392b;
+    margin-bottom: 10px;
+}
+
+/* Description text */
+p {
+    color: #444;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+/* ================================
+   Input Fields
+================================ */
+.input-group {
+    text-align: left;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    font-weight: bold;
+    color: #c0392b;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid #ffdada;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* ================================
+   Button
+================================ */
+button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #c0392b;
+}
+
+/* ================================
+   Responsive
+================================ */
+@media (max-width: 480px) {
+    .confirmation-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    input {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 12px;
+    }
+}
