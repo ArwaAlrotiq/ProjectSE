@@ -1,63 +1,86 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 
-function loadRevenueData() {
+// ================================
+// Calculate revenue per train
+// from confirmed bookings
+// ================================
+function calculateRevenuePerTrain() {
+  const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
 
-    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+  const confirmed = bookings.filter(b => b.status === 'Confirmed');
 
-    const revenueByTrain = {};
+  const revenueByTrain = {};
 
-    bookings.forEach(booking => {
+  confirmed.forEach(booking => {
+    const train = booking.train || 'Unknown';
+    const price = Number(booking.totalPrice) || 0;
 
-        const train = booking.trip || "Unknown";
-        const revenue = booking.totalPrice || 0;
+    if (!revenueByTrain[train]) {
+      revenueByTrain[train] = 0;
+    }
+    revenueByTrain[train] += price;
+  });
 
-        if (!revenueByTrain[train]) {
-            revenueByTrain[train] = 0;
-        }
-
-        revenueByTrain[train] += revenue;
-
-    });
-
-    return revenueByTrain;
+  return revenueByTrain;
 }
 
+// ================================
+// Calculate total revenue
+// for a selected duration
+// ================================
+function calculateTotalRevenueForDuration(startDate, endDate) {
+  const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  const filtered = bookings.filter(b => {
+    const bookingDate = new Date(b.date);
+    return b.status === 'Confirmed' &&
+           bookingDate >= start &&
+           bookingDate <= end;
+  });
+
+  const total = filtered.reduce((sum, b) => {
+    return sum + (Number(b.totalPrice) || 0);
+  }, 0);
+
+  return total;
+}
+
+// ================================
+// Display revenue per train
+// in a chart
+// ================================
 function renderRevenueChart() {
+  const data = calculateRevenuePerTrain();
+  const labels = Object.keys(data);
+  const values = Object.values(data);
 
-    const data = loadRevenueData();
+  const ctx = document.getElementById('revenueChart');
+  if (!ctx) return;
 
-    const labels = Object.keys(data);
-    const values = Object.values(data);
-
-    const ctx = document.getElementById("revenueChart");
-
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Revenue",
-                data: values
-            }]
-        }
-    });
-
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Revenue per Train (SAR)',
+        data: values,
+        backgroundColor: '#3b82f6'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' }
+      }
+    }
+  });
 }
 
+// ================================
+// Run on load
+// ================================
 renderRevenueChart();
-function calculateTotalRevenueForDuration(startDay, endDay) {
-    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    const revenueByTrain = {};
-
-    bookings.forEach(booking => {
-        const train = booking.trip || "Unknown";
-        const dailyRevenue = booking.dailyRevenue || []; // لو عندك الإيرادات اليومية
-        const revenue = dailyRevenue.slice(startDay, endDay+1).reduce((a,b)=>a+b,0) || booking.totalPrice || 0;
-
-        if (!revenueByTrain[train]) revenueByTrain[train] = 0;
-        revenueByTrain[train] += revenue;
-    });
-
-    return revenueByTrain;
-}
-
-
