@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Booking Report</title>
+    <link rel="stylesheet" href="daily.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body onload="generateComprehensiveReport()">
+
+    <h2>Daily Booking Report</h2>
+
+    <div class="summary-container">
+        <div class="card">
+            <h3>Total Revenue</h3>
+            <p id="totalRevenue">0 SAR</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Seats Booked</h3>
+            <p id="totalSeats">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Bookings</h3>
+            <p id="totalBookings">0</p>
+        </div>
+
+        <div class="card">
+            <h3>Total Trains</h3>
+            <p id="totalTrains">0</p>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="dailyReportChart"></canvas>
+    </div>
+
+    <script src="daily.js"></script>
+</body>
+
+</html>
