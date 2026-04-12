@@ -38,32 +38,39 @@ function printConfirmation() {
 }
 
 // ================================
-// Download confirmation as text
+// Download confirmation as PDF
 // ================================
-function downloadConfirmation() {
+async function downloadConfirmationPDF() {
   const booking = JSON.parse(localStorage.getItem('lastBooking'));
   if (!booking) return;
 
-  const content = `
-BOOKING CONFIRMATION
-====================
-Booking ID    : ${booking.id}
-Passenger     : ${booking.passengerName}
-Train         : ${booking.train}
-Date          : ${booking.date}
-Seats Booked  : ${booking.seat}
-Total Price   : ${booking.totalPrice} SAR
-Status        : ${booking.status}
-====================
-  `.trim();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
 
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `booking_${booking.id}.txt`;
-  a.click();
-  URL.revokeObjectURL(url);
+  doc.setFont("Helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("Booking Confirmation", 20, 20);
+
+  doc.setFont("Helvetica", "normal");
+  doc.setFontSize(12);
+
+  const lines = [
+    `Booking ID    : ${booking.id}`,
+    `Passenger     : ${booking.passengerName}`,
+    `Train         : ${booking.train}`,
+    `Date          : ${booking.date}`,
+    `Seats Booked  : ${booking.seat}`,
+    `Total Price   : ${booking.totalPrice} SAR`,
+    `Status        : ${booking.status}`
+  ];
+
+  let y = 40;
+  lines.forEach(line => {
+    doc.text(line, 20, y);
+    y += 10;
+  });
+
+  doc.save(`booking_${booking.id}.pdf`);
 }
 
 // ================================

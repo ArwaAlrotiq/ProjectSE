@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Booking Confirmation</title>
   <link rel="stylesheet" href="confirm.css">
+
+  <!-- jsPDF Library (Required for PDF Download) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -48,7 +51,10 @@
 
     <div class="buttons">
       <button onclick="printConfirmation()">Print</button>
-      <button onclick="downloadConfirmation()">Download</button>
+
+      <!--PDF Download Button -->
+      <button onclick="downloadConfirmationPDF()">Download PDF</button>
+
       <button class="btn-back" onclick="goBack()">Back to Bookings</button>
     </div>
 
