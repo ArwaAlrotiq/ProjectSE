@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cancel Reservation</title>
+    <link rel="stylesheet" href="cancellation.css">
+</head>
+<body>
+
+    <div class="confirmation-container">
+        <h1>Cancel Booking</h1>
+        <p>Please enter how many tickets you want to cancel</p>
+        
+        <label for="ticket-count">Number of Tickets:</label>
+        <input type="number" id="ticket-count" value="1" min="1">
+
+        <button id="cancel-btn">Confirm Cancellation</button>
+    </div>
+
+    <!-- Store the selected train ID (must be set earlier in the system) -->
+    <script>
+        var selectedTrainId = localStorage.getItem("selectedTrainId");
+    </script>
+
+    <!-- Connect this page to the cancellation logic -->
+    <script type="module" src="cancellation.js"></script>
+
+</body>
+</html>
