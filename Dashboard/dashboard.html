@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -34,9 +36,18 @@
 
     <div id="chartsContainer" class="charts-grid-container"></div>
 
-    <!-- Added from S14 -->
+    <!-- ================================
+         OCCUPANCY OVERVIEW (NEW)
+    ================================= -->
     <h2 style="margin-top: 40px;">Occupancy Overview</h2>
+
+    <!-- Occupancy Table -->
     <div id="occupancy-container"></div>
+
+    <!-- Occupancy Chart -->
+    <div style="width: 80%; margin: 40px auto;">
+        <canvas id="occupancyChart"></canvas>
+    </div>
 
     <script src="dashboard.js"></script>
 </body>

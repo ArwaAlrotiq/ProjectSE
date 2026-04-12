@@ -89,29 +89,66 @@ function renderUtilizationTable() {
    OCCUPANCY CALCULATION (from S14)
 ============================================================ */
 function getCalculatedOccupancy() {
-    const occupancyData = JSON.parse(localStorage.getItem('occupancy')) || {};
-    const schedules = JSON.parse(localStorage.getItem('trainSchedules')) || [];
-    
-    let results = [];
+  const occupancyData = JSON.parse(localStorage.getItem('occupancy')) || {};
+  const schedules = JSON.parse(localStorage.getItem('trainSchedules')) || [];
 
-    for (let trainName in occupancyData) {
-        let reserved = occupancyData[trainName];
-        const trainInfo = schedules.find(t => t.trainName === trainName);
-        let total = trainInfo && trainInfo.maxCapacity ? trainInfo.maxCapacity : 100;
-        let percentage = ((reserved / total) * 100).toFixed(1);
+  let results = [];
 
-        results.push({
-            trainName: trainName,
-            occupancyRate: percentage,
-            reservedSeats: reserved,
-            capacity: total
-        });
+  for (let trainName in occupancyData) {
+    let reserved = occupancyData[trainName];
+    const trainInfo = schedules.find(t => t.trainName === trainName);
+    let total = trainInfo && trainInfo.maxCapacity ? trainInfo.maxCapacity : 100;
+    let percentage = ((reserved / total) * 100).toFixed(1);
+
+    results.push({
+      trainName: trainName,
+      occupancyRate: percentage,
+      reservedSeats: reserved,
+      capacity: total
+    });
+  }
+
+  return results;
+}
+
+/* ============================================================
+   VISUALIZE OCCUPANCY RATES USING CHARTS
+============================================================ */
+function renderOccupancyChart() {
+  const data = getCalculatedOccupancy();
+  const canvas = document.getElementById('occupancyChart');
+
+  if (!canvas) return;
+
+  const labels = data.map(item => item.trainName);
+  const percentages = data.map(item => Number(item.occupancyRate));
+
+  new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Occupancy Rate (%)',
+        data: percentages,
+        backgroundColor: '#007bff',
+        borderColor: '#0056b3',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100
+        }
+      }
     }
-
-    return results;
+  });
 }
 
 /* ============================================================
    RUN ON LOAD
 ============================================================ */
 renderUtilizationTable();
+renderOccupancyChart();
