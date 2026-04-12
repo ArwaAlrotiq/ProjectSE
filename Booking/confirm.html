@@ -1,24 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <title>Cancel Reservation</title>
-    <link rel="stylesheet" href="confirm.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmation</title>
+  <link rel="stylesheet" href="confirm.css">
 </head>
 <body>
-    <div class="confirmation-container">
-        <h1>Cancel Booking</h1>
-        <p>Enter how many tickets to cancel</p>
-        
-        <label for="ticket-count">Number of Tickets:</label>
-        <input type="number" id="ticket-count" value="1" min="1">
-        
-        <button id="cancel-btn">Confirm Cancellation</button>
+
+  <div class="confirmation-container" id="confirmation-box">
+
+    <div class="check-icon">✓</div>
+
+    <h1>Booking Confirmed!</h1>
+    <p class="subtitle">Your reservation has been successfully processed.</p>
+
+    <div class="details-card">
+      <div class="detail-row">
+        <span class="label">Passenger Name</span>
+        <span class="value" id="passenger-name">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Train</span>
+        <span class="value" id="train-name">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Date</span>
+        <span class="value" id="booking-date">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Seats Booked</span>
+        <span class="value" id="seat-count">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Total Price</span>
+        <span class="value" id="total-price">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Booking ID</span>
+        <span class="value" id="booking-id">—</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Status</span>
+        <span class="value status-confirmed" id="status">Confirmed</span>
+      </div>
     </div>
 
-    <script>
-        var selectedTrainId = "1"; 
-    </script>
-    <script type="module" src="confirm.js"></script>
+    <div class="buttons">
+      <button onclick="printConfirmation()">Print</button>
+      <button onclick="downloadConfirmation()">Download</button>
+      <button class="btn-back" onclick="goBack()">Back to Bookings</button>
+    </div>
+
+  </div>
+
+  <script src="confirm.js" type="module"></script>
 </body>
 </html>
