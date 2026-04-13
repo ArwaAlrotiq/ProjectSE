@@ -55,46 +55,46 @@ function getAllPassengers() {
 // DOM References
 // ========================
 
-const modal = document.getElementById('modal-overlay');
-const modalTitle = document.getElementById('modal-title');
-const form = document.getElementById('passenger-form');
-const tableBody = document.getElementById('table-body');
-const emptyState = document.getElementById('empty-state');
-const searchInput = document.getElementById('search-input');
-const toast = document.getElementById('toast');
+const modal         = document.getElementById('modal-overlay');
+const modalTitle    = document.getElementById('modal-title');
+const form          = document.getElementById('passenger-form');
+const tableBody     = document.getElementById('table-body');
+const emptyState    = document.getElementById('empty-state');
+const searchInput   = document.getElementById('search-input');
+const toast         = document.getElementById('toast');
 
-const btnOpenForm = document.getElementById('btn-open-form');
+const btnOpenForm   = document.getElementById('btn-open-form');
 const btnCloseModal = document.getElementById('btn-close-modal');
-const btnCancel = document.getElementById('btn-cancel');
-const btnSubmit = document.getElementById('btn-submit');
+const btnCancel     = document.getElementById('btn-cancel');
+const btnSubmit     = document.getElementById('btn-submit');
 
-const actionPanel = document.getElementById('action-buttons');
+const actionPanel   = document.getElementById('action-buttons');
 const selectedLabel = document.getElementById('selected-passenger-label');
 
 let selectedPassengerId = localStorage.getItem("selectedPassengerId") || null;
 
 const fields = {
-  id: document.getElementById('passenger-id'),
-  firstName: document.getElementById('first-name'),
-  lastName: document.getElementById('last-name'),
-  gender: document.getElementById('gender'),
-  dob: document.getElementById('dob'),
-  nationality: document.getElementById('nationality'),
-  email: document.getElementById('email'),
-  phone: document.getElementById('phone'),
-  passport: document.getElementById('passport'),
+  id:               document.getElementById('passenger-id'),
+  firstName:        document.getElementById('first-name'),
+  lastName:         document.getElementById('last-name'),
+  gender:           document.getElementById('gender'),
+  dob:              document.getElementById('dob'),
+  nationality:      document.getElementById('nationality'),
+  email:            document.getElementById('email'),
+  phone:            document.getElementById('phone'),
+  passport:         document.getElementById('passport'),
   emergencyContact: document.getElementById('emergency-contact'),
 };
 
 const errors = {
-  firstName: document.getElementById('err-first-name'),
-  lastName: document.getElementById('err-last-name'),
-  gender: document.getElementById('err-gender'),
-  dob: document.getElementById('err-dob'),
+  firstName:   document.getElementById('err-first-name'),
+  lastName:    document.getElementById('err-last-name'),
+  gender:      document.getElementById('err-gender'),
+  dob:         document.getElementById('err-dob'),
   nationality: document.getElementById('err-nationality'),
-  email: document.getElementById('err-email'),
-  phone: document.getElementById('err-phone'),
-  passport: document.getElementById('err-passport'),
+  email:       document.getElementById('err-email'),
+  phone:       document.getElementById('err-phone'),
+  passport:    document.getElementById('err-passport'),
 };
 
 // ========================
@@ -126,14 +126,14 @@ function validateForm() {
   let valid = true;
 
   const required = [
-    { key: 'firstName', label: 'First Name', el: fields.firstName },
-    { key: 'lastName', label: 'Last Name', el: fields.lastName },
-    { key: 'gender', label: 'Gender', el: fields.gender },
-    { key: 'dob', label: 'Date of Birth', el: fields.dob },
-    { key: 'nationality', label: 'Nationality', el: fields.nationality },
-    { key: 'email', label: 'Email', el: fields.email },
-    { key: 'phone', label: 'Phone', el: fields.phone },
-    { key: 'passport', label: 'Passport / ID', el: fields.passport },
+    { key: 'firstName',  label: 'First Name',     el: fields.firstName },
+    { key: 'lastName',   label: 'Last Name',      el: fields.lastName },
+    { key: 'gender',     label: 'Gender',         el: fields.gender },
+    { key: 'dob',        label: 'Date of Birth',  el: fields.dob },
+    { key: 'nationality',label: 'Nationality',    el: fields.nationality },
+    { key: 'email',      label: 'Email',          el: fields.email },
+    { key: 'phone',      label: 'Phone',          el: fields.phone },
+    { key: 'passport',   label: 'Passport / ID',  el: fields.passport },
   ];
 
   required.forEach(({ key, label, el }) => {
@@ -178,15 +178,15 @@ function openForm(passenger = null) {
   if (passenger) {
     modalTitle.textContent = 'Edit Passenger Profile';
     btnSubmit.textContent = 'Save Changes';
-    fields.id.value = passenger.id;
-    fields.firstName.value = passenger.firstName;
-    fields.lastName.value = passenger.lastName;
-    fields.gender.value = passenger.gender;
-    fields.dob.value = passenger.dob;
-    fields.nationality.value = passenger.nationality;
-    fields.email.value = passenger.email;
-    fields.phone.value = passenger.phone;
-    fields.passport.value = passenger.passport;
+    fields.id.value           = passenger.id;
+    fields.firstName.value    = passenger.firstName;
+    fields.lastName.value     = passenger.lastName;
+    fields.gender.value       = passenger.gender;
+    fields.dob.value          = passenger.dob;
+    fields.nationality.value  = passenger.nationality;
+    fields.email.value        = passenger.email;
+    fields.phone.value        = passenger.phone;
+    fields.passport.value     = passenger.passport;
     fields.emergencyContact.value = passenger.emergencyContact || '';
   } else {
     modalTitle.textContent = 'Register New Passenger';
@@ -285,8 +285,8 @@ function formatDate(dateStr) {
 // ========================
 
 function updateStats(passengers) {
-  document.getElementById('stat-total').textContent = passengers.length;
-  document.getElementById('stat-male').textContent = passengers.filter(p => p.gender === 'Male').length;
+  document.getElementById('stat-total').textContent  = passengers.length;
+  document.getElementById('stat-male').textContent   = passengers.filter(p => p.gender === 'Male').length;
   document.getElementById('stat-female').textContent = passengers.filter(p => p.gender === 'Female').length;
 }
 
@@ -301,6 +301,13 @@ function updateActionPanel() {
   }
 
   const passenger = getAllPassengers().find(p => p.id === selectedPassengerId);
+
+  if (!passenger) {
+    localStorage.removeItem("selectedPassengerId");
+    selectedPassengerId = null;
+    actionPanel.style.display = 'none';
+    return;
+  }
 
   selectedLabel.textContent = `Selected: ${passenger.firstName} ${passenger.lastName}`;
 
@@ -326,15 +333,20 @@ function updateActionPanel() {
 // Event Handlers
 // ========================
 
-window.handleEdit = function (id) {
+window.handleEdit = function(id) {
   const passenger = getAllPassengers().find(p => p.id === id);
   if (passenger) openForm(passenger);
 };
 
-window.handleDelete = function (id) {
+window.handleDelete = function(id) {
   if (confirm('Are you sure you want to delete this passenger profile?')) {
+
     deletePassenger(id);
+    localStorage.removeItem("selectedPassengerId");
+    selectedPassengerId = null;
+
     renderTable(searchInput.value);
+    updateActionPanel();
     showToast('Passenger profile deleted.', 'error');
   }
 };
@@ -357,14 +369,14 @@ form.addEventListener('submit', (e) => {
   if (!validateForm()) return;
 
   const data = {
-    firstName: fields.firstName.value.trim(),
-    lastName: fields.lastName.value.trim(),
-    gender: fields.gender.value,
-    dob: fields.dob.value,
-    nationality: fields.nationality.value.trim(),
-    email: fields.email.value.trim(),
-    phone: fields.phone.value.trim(),
-    passport: fields.passport.value.trim(),
+    firstName:        fields.firstName.value.trim(),
+    lastName:         fields.lastName.value.trim(),
+    gender:           fields.gender.value,
+    dob:              fields.dob.value,
+    nationality:      fields.nationality.value.trim(),
+    email:            fields.email.value.trim(),
+    phone:            fields.phone.value.trim(),
+    passport:         fields.passport.value.trim(),
     emergencyContact: fields.emergencyContact.value.trim(),
   };
 
