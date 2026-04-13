@@ -518,3 +518,59 @@ tbody tr:hover {
 .toast.toast-error {
   background: #e74c3c;
 }
+/* ==============================
+   Radio Button Column
+============================== */
+.radio-col {
+  width: 50px;
+  text-align: center;
+}
+
+.radio-select {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+/* ==============================
+   Action Buttons Under Table
+============================== */
+.action-buttons {
+  margin-top: 20px;
+  padding: 15px 20px;
+  background: white;
+  border: 1px solid #e1e4e8;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#selected-passenger-label {
+  font-weight: 700;
+  color: #2c3e50;
+  margin-right: 10px;
+}
+
+.small-btn {
+  padding: 8px 14px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.small-btn:hover {
+  background: #2980b9;
+}
+
+.small-btn.delete {
+  background: #e74c3c;
+}
+
+.small-btn.delete:hover {
+  background: #c0392b;
+}

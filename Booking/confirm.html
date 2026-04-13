@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +10,15 @@
   <!-- jsPDF Library (Required for PDF Download) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+
 <body>
 
   <div class="confirmation-container" id="confirmation-box">
 
     <div class="check-icon">✓</div>
-
+    <button onclick="history.back()" class="back-btn">← Back</button>
     <h1>Booking Confirmed!</h1>
+    
     <p class="subtitle">Your reservation has been successfully processed.</p>
 
     <div class="details-card">
@@ -55,11 +58,11 @@
       <!--PDF Download Button -->
       <button onclick="downloadConfirmationPDF()">Download PDF</button>
 
-      <button class="btn-back" onclick="goBack()">Back to Bookings</button>
     </div>
 
   </div>
 
   <script src="confirm.js" type="module"></script>
 </body>
+
 </html>
