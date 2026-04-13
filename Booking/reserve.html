@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reserve Tickets</title>
+    <link rel="stylesheet" href="reserve.css">
+</head>
+<body>
+    <div class="booking-container">
+        <h1>Book Your Trip</h1>
+        <p>Select number of tickets to reserve</p>
+        
+        <label for="ticket-count">Number of Tickets:</label>
+        <input type="number" id="ticket-count" value="1" min="1">
+        
+        <button id="reserve-btn">Confirm Reservation</button>
+    </div>
+
+    <script>
+        var selectedTrainId = "1"; 
+    </script>
+    <script type="module" src="reserve.js"></script>
+</body>
+</html>

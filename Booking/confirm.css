@@ -1,0 +1,143 @@
+/* ================================
+   General Page Styling
+================================ */
+body {
+  font-family: "Poppins", sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ================================
+   Confirmation Container
+================================ */
+.confirmation-container {
+  background: #ffffff;
+  width: 420px;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Check Icon */
+.check-icon {
+  font-size: 55px;
+  color: #28a745;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Title */
+h1 {
+  margin: 0;
+  font-size: 26px;
+  color: #333;
+}
+
+.subtitle {
+  margin-top: 5px;
+  color: #666;
+  font-size: 14px;
+}
+
+/* ================================
+   Details Card
+================================ */
+.details-card {
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 1px solid #e5e5e5;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 600;
+  color: #444;
+}
+
+.value {
+  color: #333;
+  font-weight: 500;
+}
+
+.status-confirmed {
+  color: #28a745;
+  font-weight: bold;
+}
+
+/* ================================
+   Buttons
+================================ */
+.buttons {
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: 600;
+}
+
+/* Print Button */
+button:nth-child(1) {
+  background: #007bff;
+  color: white;
+}
+
+button:nth-child(1):hover {
+  background: #0069d9;
+}
+
+/* Download PDF Button */
+button:nth-child(2) {
+  background: #17a2b8;
+  color: white;
+}
+
+button:nth-child(2):hover {
+  background: #138496;
+}
+
+/* Back Button */
+.btn-back {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-back:hover {
+  background: #5a6268;
+}
+
+/* ================================
+   Responsive
+================================ */
+@media (max-width: 480px) {
+  .confirmation-container {
+    width: 90%;
+    padding: 20px;
+  }
+}
