@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h3 class="dashboard-title">📊 System Performance Dashboard</h3>
+        
+        <div class="stats-box">
+            <p>Response Time: <span id="avg">--</span> ms</p>
+            <p>System Status: <span id="status">Ready</span></p>
+        </div>
+
+        <button id="test-btn" onclick="testPerformance()">Test System Speed</button>
+
+        <div class="chart-container">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+
+    <script src="performance.js"></script>
+</body>
+</html>
