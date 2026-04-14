@@ -2,35 +2,40 @@ import { checkAuth } from '../Login/auth.js';
 checkAuth();
 
 // ================================
-// Calculate total revenue from
-// all confirmed bookings
+// Calculate total revenue
 // ================================
 function calculateTotalRevenue() {
-  const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+  const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+  const schedules = JSON.parse(localStorage.getItem("trainSchedules") || []);
 
-  const confirmed = bookings.filter(b => b.status === 'Confirmed');
+  let total = 0;
 
-  const total = confirmed.reduce((sum, booking) => {
-    return sum + (Number(booking.totalPrice) || 0);
-  }, 0);
+  bookings.forEach(booking => {
+    if (booking.status === "Confirmed") {
+      const schedule = schedules.find(s => s.id == booking.trainId);
+
+      if (schedule) {
+        total += Number(schedule.ticketPrice) * Number(booking.seat);
+      }
+    }
+  });
 
   return total;
 }
 
 // ================================
 // Display total revenue
-// on the dashboard
 // ================================
 function renderTotalRevenue() {
   const total = calculateTotalRevenue();
 
-  const element = document.getElementById('total-revenue');
+  const element = document.getElementById("total-revenue");
   if (element) {
-    element.textContent = total.toFixed(2) + ' SAR';
+    element.textContent = total.toFixed(2) + " SAR";
   }
 }
 
 // ================================
 // Run on load
 // ================================
-renderTotalRevenue();
+document.addEventListener("DOMContentLoaded", renderTotalRevenue);

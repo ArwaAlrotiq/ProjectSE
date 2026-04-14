@@ -1,5 +1,5 @@
-// Simple hashing function (not real encryption)
-function simpleHash(str) {
+// Simple hashing function (not secure, but enough for local testing)
+export function simpleHash(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
         const char = str.charCodeAt(i);
@@ -7,13 +7,4 @@ function simpleHash(str) {
         hash = hash & hash;
     }
     return hash.toString(16);
-}
-
-async function encryptPassword(password) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
 }

@@ -8,7 +8,9 @@ function generateComprehensiveReport() {
 
     const dailyStats = {};
 
-    const distinctTrainsInBookings = [...new Set(bookings.map(b => b.train))];
+    const distinctTrainsInBookings = [
+        ...new Set(bookings.map(b => b.trainName || "Unknown Train"))
+    ];
 
     const displayTotalTrains = Math.max(schedules.length, distinctTrainsInBookings.length);
 
@@ -16,13 +18,15 @@ function generateComprehensiveReport() {
         if (booking.status === "Confirmed") {
             confirmedBookings++;
 
-            const seats = booking.seat || booking.numberOfSeats || 1;
-            const price = booking.price || 0;
+            const seats = booking.seatCount || booking.numberOfSeats || 1;
+            const price = booking.totalPrice || booking.ticketPrice || 0;
 
             totalSeats += seats;
-            totalRevenue += price * seats;
+            totalRevenue += price;
 
-            const date = new Date(booking.bookingTime).toLocaleDateString();
+            const date = booking.bookingTime
+                ? new Date(booking.bookingTime).toLocaleDateString()
+                : new Date().toLocaleDateString();
 
             if (!dailyStats[date]) {
                 dailyStats[date] = 0;

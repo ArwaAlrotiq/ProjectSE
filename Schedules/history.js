@@ -22,11 +22,11 @@ function displayHistoricalSchedules() {
         const row = `
             <tr>
                 <td>${schedule.trainName}</td>
-                <td>${schedule.route}</td>
-                <td>${schedule.departure}</td>
-                <td>${schedule.arrival}</td>
-                <td>${schedule.price}</td>
-                <td>${schedule.capacity}</td>
+                <td>${schedule.destination}</td>
+                <td>${schedule.departureTime}</td>
+                <td>${schedule.arrivalTime}</td>
+                <td>${schedule.ticketPrice} SAR</td>
+                <td>${schedule.seatCapacity}</td>
                 <td>${schedule.status || "Completed"}</td>
             </tr>
         `;
@@ -61,14 +61,20 @@ function searchHistoricalSchedules() {
         const row = `
             <tr>
                 <td>${schedule.trainName}</td>
-                <td>${schedule.route}</td>
-                <td>${schedule.departure}</td>
-                <td>${schedule.arrival}</td>
-                <td>${schedule.price}</td>
-                <td>${schedule.capacity}</td>
+                <td>${schedule.destination}</td>
+                <td>${schedule.departureTime}</td>
+                <td>${schedule.arrivalTime}</td>
+                <td>${schedule.ticketPrice} SAR</td>
+                <td>${schedule.seatCapacity}</td>
                 <td>${schedule.status || "Completed"}</td>
             </tr>
         `;
         tableBody.innerHTML += row;
     });
+}
+function clearHistory() {
+    if (confirm("Are you sure you want to delete all historical records?")) {
+        localStorage.removeItem("historicalSchedules");
+        displayHistoricalSchedules();
+    }
 }

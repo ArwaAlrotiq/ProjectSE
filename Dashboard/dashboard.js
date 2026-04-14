@@ -2,12 +2,34 @@
    Dashboard Initialization
 ================================ */
 function initDashboard() {
-    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    const schedules = JSON.parse(localStorage.getItem("trainSchedules")) || [];
+    const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+    const schedules = JSON.parse(localStorage.getItem("trainSchedules") || []);
 
-    updateSummaryCards(bookings, schedules.length);
+    updateSummaryCards(bookings, schedules);
     renderUtilizationCharts(bookings, schedules);
-    updateOccupancy(); // from S14
+}
+
+/* ================================
+   Summary Cards
+================================ */
+function updateSummaryCards(bookings, schedules) {
+    let totalRevenue = 0;
+    let confirmedBookings = 0;
+
+    bookings.forEach(b => {
+        if (b.status === "Confirmed") {
+            confirmedBookings++;
+
+            const schedule = schedules.find(s => s.id == b.trainId);
+            if (schedule) {
+                totalRevenue += schedule.ticketPrice * b.seat;
+            }
+        }
+    });
+
+    document.getElementById("totalTrains").textContent = schedules.length;
+    document.getElementById("totalBookings").textContent = confirmedBookings;
+    document.getElementById("totalRevenue").textContent = totalRevenue + " SAR";
 }
 
 /* ================================
@@ -18,16 +40,16 @@ function renderUtilizationCharts(bookings, schedules) {
     chartsContainer.innerHTML = "";
 
     schedules.forEach((train, index) => {
-        const booked = bookings
-            .filter(b => b.train === train.name && b.status === "Confirmed")
-            .reduce((sum, b) => sum + (b.seat * b.numberOfSeats || 1), 0);
+        const bookedSeats = bookings
+            .filter(b => b.trainId == train.id && b.status === "Confirmed")
+            .reduce((sum, b) => sum + b.seat, 0);
 
-        const capacity = train.capacity || 50;
-        const utilization = ((booked / capacity) * 100).toFixed(1);
+        const capacity = Number(train.seatCapacity);
+        const utilization = ((bookedSeats / capacity) * 100).toFixed(1);
 
         const chartWrapper = document.createElement("div");
         chartWrapper.className = "chart-wrapper";
-        chartWrapper.innerHTML = `<h4>${train.name}</h4>`;
+        chartWrapper.innerHTML = `<h4>${train.trainName}</h4>`;
 
         const canvas = document.createElement("canvas");
         const canvasId = `chart_${index}`;
@@ -36,7 +58,7 @@ function renderUtilizationCharts(bookings, schedules) {
         chartWrapper.appendChild(canvas);
         chartsContainer.appendChild(chartWrapper);
 
-        renderDoughnut(canvasId, booked, capacity, utilization);
+        renderDoughnut(canvasId, bookedSeats, capacity, utilization);
     });
 }
 
@@ -68,47 +90,6 @@ function renderDoughnut(id, booked, total, percent) {
 }
 
 /* ================================
-   Summary Cards (Top Section)
+   Initialize Dashboard
 ================================ */
-function updateSummaryCards(bookings, trainCount) {
-    let revenue = 0;
-    let confirmedCount = 0;
-
-    bookings.forEach(b => {
-        if (b.status === "Confirmed") {
-            confirmedCount++;
-            revenue += (b.price * (b.seat || 1));
-        }
-    });
-
-    document.getElementById("totalTrains").textContent = trainCount;
-    document.getElementById("totalBookings").textContent = confirmedCount;
-    document.getElementById("totalRevenue").textContent = revenue + " SAR";
-}
-
-/* ================================
-   OCCUPANCY SECTION (from S14)
-================================ */
-window.addEventListener('DOMContentLoaded', () => {
-    updateOccupancy();
-});
-
-function updateOccupancy() {
-    let occupancyData = JSON.parse(localStorage.getItem('occupancy')) || {};
-    const container = document.getElementById('occupancy-container');
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    for (let train in occupancyData) {
-        let p = document.createElement('p');
-        p.textContent = `${train}: ${occupancyData[train]} seats occupied`;
-        container.appendChild(p);
-    }
-}
-
-function bookSeat(train, seats) {
-    let occupancyData = JSON.parse(localStorage.getItem('occupancy')) || {};
-    occupancyData[train] = (occupancyData[train] || 0) + seats;
-    localStorage.setItem('occupancy', JSON.stringify(occupancyData));
-}
+document.addEventListener("DOMContentLoaded", initDashboard);

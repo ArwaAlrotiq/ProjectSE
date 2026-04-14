@@ -7,7 +7,7 @@ import { getScheduleById, cancelBooking } from './booking.js';
    Update Booking History
 ============================================================ */
 function updateBookingHistory(bookingId, countToRemove) {
-  let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+  let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
   let found = false;
   let message = "";
 
@@ -56,7 +56,20 @@ document.getElementById("cancel-btn").addEventListener("click", () => {
     return;
   }
 
-  const schedule = getScheduleById(selectedTrainId);
+  const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+  const booking = bookings.find(b => b.id == bookingIdInput);
+
+  if (!booking) {
+    alert("Booking ID not found.");
+    return;
+  }
+
+  const schedule = getScheduleById(booking.trainId);
+
+  if (!schedule) {
+    alert("Train schedule not found.");
+    return;
+  }
 
   const result = cancelBooking(schedule, ticketsToCancel);
 

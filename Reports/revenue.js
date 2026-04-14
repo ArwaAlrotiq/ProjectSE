@@ -1,6 +1,3 @@
-import { checkAuth } from '../Login/auth.js';
-checkAuth();
-
 function calculateRevenuePerTrain() {
   const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
   const confirmed = bookings.filter(b => b.status === 'Confirmed');
@@ -8,13 +5,14 @@ function calculateRevenuePerTrain() {
   const revenueByTrain = {};
 
   confirmed.forEach(booking => {
-    const train = booking.train || 'Unknown';
+    const trainName = booking.trainName || "Unknown Train";
     const price = Number(booking.totalPrice) || 0;
 
-    if (!revenueByTrain[train]) {
-      revenueByTrain[train] = 0;
+    if (!revenueByTrain[trainName]) {
+      revenueByTrain[trainName] = 0;
     }
-    revenueByTrain[train] += price;
+
+    revenueByTrain[trainName] += price;
   });
 
   return revenueByTrain;
@@ -27,6 +25,11 @@ function renderRevenueChart() {
 
   const ctx = document.getElementById('revenueChart');
   if (!ctx) return;
+
+  if (labels.length === 0) {
+    ctx.parentElement.innerHTML = "<p>No revenue data available</p>";
+    return;
+  }
 
   new Chart(ctx, {
     type: 'bar',
@@ -42,6 +45,12 @@ function renderRevenueChart() {
       responsive: true,
       plugins: {
         legend: { position: 'top' }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 }
+        }
       }
     }
   });

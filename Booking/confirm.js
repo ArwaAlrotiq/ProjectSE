@@ -1,6 +1,6 @@
 // ================================
 // Load confirmation details
-// from localStorage
+// from localStorage (lastBooking)
 // ================================
 function loadConfirmation() {
   const booking = JSON.parse(localStorage.getItem('lastBooking'));
@@ -14,16 +14,22 @@ function loadConfirmation() {
 
   document.getElementById('passenger-name').textContent =
     booking.passengerName || '—';
+
   document.getElementById('train-name').textContent =
     booking.train || '—';
+
   document.getElementById('booking-date').textContent =
     booking.date || '—';
+
   document.getElementById('seat-count').textContent =
     booking.seat || '—';
+
   document.getElementById('total-price').textContent =
     booking.totalPrice ? booking.totalPrice + ' SAR' : '—';
+
   document.getElementById('booking-id').textContent =
     booking.id || '—';
+
   document.getElementById('status').textContent =
     booking.status || 'Confirmed';
 }

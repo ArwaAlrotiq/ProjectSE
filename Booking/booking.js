@@ -47,6 +47,7 @@ function saveBookingToHistory(schedule, numberOfTickets, passengerName = "Passen
 
   const booking = {
     id: Date.now().toString(),
+    trainId: schedule.id,
     train: schedule.trainName,
     date: schedule.departureTime,
     seat: numberOfTickets,
@@ -77,9 +78,8 @@ export function bookTickets(schedule, numberOfTickets = 1, passengerName = "Pass
   const updatedSchedule = { ...schedule };
   updatedSchedule.availableSeats -= numberOfTickets;
 
-  if (updatedSchedule.availableSeats === 0) {
-    updatedSchedule.status = "Sold Out";
-  }
+  updatedSchedule.status =
+    updatedSchedule.availableSeats === 0 ? "Sold Out" : "Available";
 
   updateScheduleInStorage(updatedSchedule);
   saveBookingToHistory(updatedSchedule, numberOfTickets, passengerName);
@@ -110,7 +110,8 @@ export function cancelBooking(schedule, numberOfTickets = 1) {
     updatedSchedule.availableSeats = updatedSchedule.seatCapacity;
   }
 
-  updatedSchedule.status = "Available";
+  updatedSchedule.status =
+    updatedSchedule.availableSeats === 0 ? "Sold Out" : "Available";
 
   updateScheduleInStorage(updatedSchedule);
 
@@ -144,6 +145,9 @@ export function rebookExistingTicket(bookingId, additionalTickets) {
   }
 
   schedule.availableSeats -= additionalTickets;
+  schedule.status =
+    schedule.availableSeats === 0 ? "Sold Out" : "Available";
+
   booking.seat += additionalTickets;
 
   updateScheduleInStorage(schedule);

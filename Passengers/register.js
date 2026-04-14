@@ -37,6 +37,7 @@ function updatePassenger(id, data) {
   const passengers = loadPassengers();
   const index = passengers.findIndex((p) => p.id === id);
   if (index === -1) return null;
+
   passengers[index] = { ...passengers[index], ...data };
   savePassengers(passengers);
   return passengers[index];
@@ -386,8 +387,9 @@ form.addEventListener("submit", (e) => {
 
   if (!validateForm()) return;
 
+  const id = fields.id.value;
+
   const data = {
-    id: Date.now().toString(),
     firstName: fields.firstName.value.trim(),
     lastName: fields.lastName.value.trim(),
     gender: fields.gender.value,
@@ -398,8 +400,6 @@ form.addEventListener("submit", (e) => {
     passport: fields.passport.value.trim(),
     emergencyContact: fields.emergencyContact.value.trim(),
   };
-
-  const id = fields.id.value;
 
   if (id) {
     updatePassenger(id, data);

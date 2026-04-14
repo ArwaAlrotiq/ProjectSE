@@ -1,14 +1,16 @@
-function validate(){
-    const capacity=document.getElementById('seat-capacity').value;
-    const price=document.getElementById('ticket-price').value;
+function validate() {
+    const capacity = Number(document.getElementById('seat-capacity').value);
+    const price = Number(document.getElementById('ticket-price').value);
 
-    if(capacity<=0){
-        alert("please enter a valid seat capacity");
+    if (!capacity || capacity <= 0 || isNaN(capacity)) {
+        alert("Please enter a valid seat capacity");
         return false;
     }
-    if(price <=0){
-        alert("please enter a valid price");
+
+    if (!price || price <= 0 || isNaN(price)) {
+        alert("Please enter a valid ticket price");
         return false;
     }
+
     return true;
 }

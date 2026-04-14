@@ -21,8 +21,19 @@ function saveSchedules() {
   localStorage.setItem('trainSchedules', JSON.stringify(schedules));
 }
 
+function saveToHistory(schedule) {
+  const history = JSON.parse(localStorage.getItem("historicalSchedules")) || [];
+  history.push(schedule);
+  localStorage.setItem("historicalSchedules", JSON.stringify(history));
+}
+
 function createSchedule(schedule) {
   schedule.id = Date.now().toString();
+  schedule.seatCapacity = Number(schedule.seatCapacity);
+  schedule.ticketPrice = Number(schedule.ticketPrice);
+  schedule.availableSeats = schedule.seatCapacity;
+  schedule.status = "Available";
+
   schedules.push(schedule);
   saveSchedules();
   renderTable();
@@ -31,7 +42,20 @@ function createSchedule(schedule) {
 function updateSchedule(id, updatedData) {
   const index = schedules.findIndex(s => s.id === id);
   if (index !== -1) {
-    schedules[index] = { ...schedules[index], ...updatedData };
+
+    const old = schedules[index];
+
+    // Save old version to history
+    saveToHistory({ ...old, status: "Updated" });
+
+    schedules[index] = {
+      ...old,
+      ...updatedData,
+      seatCapacity: Number(updatedData.seatCapacity),
+      ticketPrice: Number(updatedData.ticketPrice),
+      availableSeats: Math.min(old.availableSeats, Number(updatedData.seatCapacity))
+    };
+
     saveSchedules();
     renderTable();
   }
@@ -39,6 +63,12 @@ function updateSchedule(id, updatedData) {
 
 window.deleteSchedule = function(id) {
   if (confirm("Are you sure you want to delete this train?")) {
+
+    const schedule = schedules.find(s => s.id === id);
+
+    // Save deleted schedule to history
+    saveToHistory({ ...schedule, status: "Deleted" });
+
     schedules = schedules.filter(s => s.id !== id);
     saveSchedules();
     renderTable();
@@ -61,7 +91,7 @@ function renderTable() {
       <td>${schedule.departureTime}</td>
       <td>${schedule.arrivalTime}</td>
       <td>${schedule.destination}</td>
-      <td>${schedule.ticketPrice}</td>
+      <td>${schedule.ticketPrice} SAR</td>
       <td>${schedule.seatCapacity}</td>
       <td>
         <button class="btn-delete" onclick="deleteSchedule('${schedule.id}')">Delete</button>
@@ -75,16 +105,16 @@ function renderTable() {
 
 form.addEventListener('submit', function(e) {
   e.preventDefault();
-  
+
   const newSchedule = {
-    trainName: trainNameInput.value,
+    trainName: trainNameInput.value.trim(),
     departureTime: departureTimeInput.value,
     arrivalTime: arrivalTimeInput.value,
-    destination: destinationInput.value,
+    destination: destinationInput.value.trim(),
     ticketPrice: price.value,
-    seatCapacity: capacity.value 
+    seatCapacity: capacity.value
   };
-  
+
   createSchedule(newSchedule);
   form.reset();
 });
@@ -110,10 +140,10 @@ btnUpdate.addEventListener('click', function() {
   if (!id) return;
   
   const updatedData = {
-    trainName: trainNameInput.value,
+    trainName: trainNameInput.value.trim(),
     departureTime: departureTimeInput.value,
     arrivalTime: arrivalTimeInput.value,
-    destination: destinationInput.value,
+    destination: destinationInput.value.trim(),
     ticketPrice: price.value,
     seatCapacity: capacity.value
   };
@@ -128,7 +158,29 @@ btnUpdate.addEventListener('click', function() {
 
 function init() {
   loadSchedules();
+  moveFinishedTrainsToHistory();
   renderTable();
 }
 
+
 init();
+function moveFinishedTrainsToHistory() {
+  const now = new Date();
+
+  const active = [];
+  const history = JSON.parse(localStorage.getItem("historicalSchedules")) || [];
+
+  schedules.forEach(schedule => {
+    const arrival = new Date(schedule.arrivalTime);
+
+    if (arrival < now) {
+      history.push({ ...schedule, status: "Completed" });
+    } else {
+      active.push(schedule);
+    }
+  });
+
+  schedules = active;
+  localStorage.setItem("trainSchedules", JSON.stringify(schedules));
+  localStorage.setItem("historicalSchedules", JSON.stringify(history));
+}
