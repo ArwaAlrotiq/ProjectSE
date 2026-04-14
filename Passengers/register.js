@@ -68,6 +68,11 @@ const btnCloseModal = document.getElementById('btn-close-modal');
 const btnCancel     = document.getElementById('btn-cancel');
 const btnSubmit     = document.getElementById('btn-submit');
 
+const actionPanel   = document.getElementById('action-buttons');
+const selectedLabel = document.getElementById('selected-passenger-label');
+
+let selectedPassengerId = localStorage.getItem("selectedPassengerId") || null;
+
 const fields = {
   id:               document.getElementById('passenger-id'),
   firstName:        document.getElementById('first-name'),
@@ -221,8 +226,11 @@ function renderTable(query = '') {
 
     filtered.forEach((p, index) => {
       const row = document.createElement('tr');
-      row.setAttribute('data-testid', `row-passenger-${p.id}`);
+
       row.innerHTML = `
+        <td class="radio-col">
+          <input type="radio" name="selectPassenger" class="radio-select" value="${p.id}">
+        </td>
         <td>${index + 1}</td>
         <td><strong>${p.firstName} ${p.lastName}</strong></td>
         <td>${p.gender}</td>
@@ -232,15 +240,38 @@ function renderTable(query = '') {
         <td>${p.phone}</td>
         <td><code>${p.passport}</code></td>
         <td class="td-actions">
-          <button class="btn-edit-row" data-testid="button-edit-${p.id}" onclick="handleEdit('${p.id}')">Edit</button>
-          <button class="btn-delete-row" data-testid="button-delete-${p.id}" onclick="handleDelete('${p.id}')">Delete</button>
+          <button class="btn-edit-row" onclick="handleEdit('${p.id}')">Edit</button>
+          <button class="btn-delete-row" onclick="handleDelete('${p.id}')">Delete</button>
         </td>
       `;
+
       tableBody.appendChild(row);
     });
   }
 
   updateStats(passengers);
+  attachRadioEvents();
+
+  // Restore selected passenger
+  const savedId = localStorage.getItem("selectedPassengerId");
+  if (savedId) {
+    const radio = document.querySelector(`input.radio-select[value="${savedId}"]`);
+    if (radio) {
+      radio.checked = true;
+      selectedPassengerId = savedId;
+      updateActionPanel();
+    }
+  }
+}
+
+function attachRadioEvents() {
+  document.querySelectorAll('.radio-select').forEach(radio => {
+    radio.addEventListener('change', () => {
+      selectedPassengerId = radio.value;
+      localStorage.setItem("selectedPassengerId", selectedPassengerId);
+      updateActionPanel();
+    });
+  });
 }
 
 function formatDate(dateStr) {
@@ -260,7 +291,46 @@ function updateStats(passengers) {
 }
 
 // ========================
-// Event Handlers (global for inline onclick)
+// Action Panel
+// ========================
+
+function updateActionPanel() {
+  if (!selectedPassengerId) {
+    actionPanel.style.display = 'none';
+    return;
+  }
+
+  const passenger = getAllPassengers().find(p => p.id === selectedPassengerId);
+
+  if (!passenger) {
+    localStorage.removeItem("selectedPassengerId");
+    selectedPassengerId = null;
+    actionPanel.style.display = 'none';
+    return;
+  }
+
+  selectedLabel.textContent = `Selected: ${passenger.firstName} ${passenger.lastName}`;
+
+  actionPanel.style.display = 'flex';
+
+  document.getElementById('btn-profile').onclick =
+    () => window.location.href = `../Passengers/profile.html?id=${selectedPassengerId}`;
+
+  document.getElementById('btn-cancel-booking').onclick =
+    () => window.location.href = `../Booking/cancellation.html?id=${selectedPassengerId}`;
+
+  document.getElementById('btn-booking').onclick =
+    () => window.location.href = `../Booking/reserve.html?id=${selectedPassengerId}`;
+
+  document.getElementById('btn-extra-seats').onclick =
+    () => window.location.href = `../Booking/booking.html?id=${selectedPassengerId}`;
+
+  document.getElementById('btn-confirm').onclick =
+    () => window.location.href = `../Booking/confirm.html?id=${selectedPassengerId}`;
+}
+
+// ========================
+// Event Handlers
 // ========================
 
 window.handleEdit = function(id) {
@@ -269,9 +339,14 @@ window.handleEdit = function(id) {
 };
 
 window.handleDelete = function(id) {
-  if (confirm('Are you sure you want to delete this passenger profile? This action cannot be undone.')) {
+  if (confirm('Are you sure you want to delete this passenger profile?')) {
+
     deletePassenger(id);
+    localStorage.removeItem("selectedPassengerId");
+    selectedPassengerId = null;
+
     renderTable(searchInput.value);
+    updateActionPanel();
     showToast('Passenger profile deleted.', 'error');
   }
 };
@@ -319,12 +394,9 @@ form.addEventListener('submit', (e) => {
   renderTable(searchInput.value);
 });
 
-searchInput.addEventListener('input', () => {
-  renderTable(searchInput.value);
-});
-
 // ========================
 // Init
 // ========================
 
 renderTable();
+updateActionPanel();
