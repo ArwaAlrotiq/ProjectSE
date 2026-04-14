@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Passenger Profile</title>
     <link rel="stylesheet" href="profile.css">
 </head>
+
 <body>
     <div class="profile-container">
+        <button onclick="history.back()" class="back-btn">← Back</button>
         <h2>Manage Passenger Profile</h2>
         <p>Update or delete your registration details below.</p>
-        
+
         <form id="profile-form">
             <input type="hidden" id="p-id">
-            
+
             <div class="grid-container">
                 <div class="form-group">
                     <label>First Name</label>
@@ -65,4 +68,5 @@
 
     <script type="module" src="profile.js"></script>
 </body>
+
 </html>
