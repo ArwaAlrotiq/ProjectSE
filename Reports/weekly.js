@@ -25,7 +25,7 @@ function generateWeeklyReport() {
         }
     });
 
-    // استخدام 'en-US' لضمان ظهور الأرقام بالشكل الإنجليزي (0123)
+    // استخدام 'en-' ل
     document.getElementById("totalRevenueWeek").textContent = totalRevenue.toLocaleString('en-US') + " SAR";
     document.getElementById("totalSeatsWeek").textContent = totalSeats.toLocaleString('en-US');
     document.getElementById("totalBookingsWeek").textContent = totalConfirmed.toLocaleString('en-US');
@@ -57,7 +57,6 @@ function renderWeeklyChart(labels, data) {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        // إجبار الأرقام في الرسم البياني على أن تكون صحيحة وبدون كسور
                         stepSize: 1,
                         callback: function(value) {
                             if (value % 1 === 0) return value;
