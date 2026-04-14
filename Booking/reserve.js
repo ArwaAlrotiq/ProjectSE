@@ -50,3 +50,24 @@ document.getElementById("reserve-btn").addEventListener("click", () => {
         renderSeats(result.schedule);
     }
 });
+
+const trainInput = document.getElementById('train-id-input');
+const seatsDisplay = document.getElementById('available-seats-count');
+
+if (trainInput) {
+    trainInput.addEventListener('input', () => {
+        const trainId = trainInput.value.trim();
+        
+        
+        const schedule = getScheduleById(trainId);
+        
+        if (schedule) {
+            seatsDisplay.textContent = schedule.availableSeats;
+            
+            seatsDisplay.style.color = schedule.availableSeats > 0 ? "#27ae60" : "#e74c3c";
+        } else {
+            seatsDisplay.textContent = trainId === "" ? "-" : "Not found";
+            seatsDisplay.style.color = "#e74c3c";
+        }
+    });
+}
