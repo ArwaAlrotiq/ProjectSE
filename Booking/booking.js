@@ -1,40 +1,128 @@
 // ================================================
-// S10: Transactional Integrity & Rollback
+// STORAGE HELPERS
 // ================================================
-export function bookWithRollback(scheduleId, numberOfTickets = 1) {
-  // Step 1: Backup current state
-  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
-  const backupSchedules = JSON.stringify(schedules);
-  const backupBookings = localStorage.getItem("bookings");
+function loadSchedules() {
+  return JSON.parse(localStorage.getItem("trainSchedules") || "[]");
+}
 
-  try {
-    // Step 2: Get schedule
-    const schedule = getScheduleById(scheduleId);
-    if (!schedule) {
-      throw new Error("Schedule not found");
-    }
+function saveSchedules(schedules) {
+  localStorage.setItem("trainSchedules", JSON.stringify(schedules));
+}
 
-    // Step 3: Attempt booking
-    const result = bookTickets(schedule, numberOfTickets);
-    if (!result.success) {
-      throw new Error(result.message);
-    }
+export function getScheduleById(id) {
+  const schedules = loadSchedules();
+  return schedules.find(s => s.id == id);
+}
 
-    // Step 4: Success
-    return { success: true, message: result.message };
+export function updateScheduleInStorage(updatedSchedule) {
+  const schedules = loadSchedules();
+  const index = schedules.findIndex(s => s.id == updatedSchedule.id);
 
-  } catch (error) {
-    // Step 5: Rollback
-    localStorage.setItem('trainSchedules', backupSchedules);
-    if (backupBookings) {
-      localStorage.setItem("bookings", backupBookings);
-    }
-    return { success: false, message: "Booking failed: " + error.message };
+  if (index !== -1) {
+    schedules[index] = updatedSchedule;
+    saveSchedules(schedules);
   }
 }
 
 // ================================================
-// Rebook Existing Ticket
+// CHECK AVAILABILITY
+// ================================================
+export function checkAvailability(schedule) {
+  if (!schedule) {
+    return { available: false, message: "Schedule not found" };
+  }
+
+  if (schedule.availableSeats <= 0) {
+    return { available: false, message: "Sold Out" };
+  }
+
+  return { available: true, message: "Seats available" };
+}
+
+// ================================================
+// SAVE BOOKING HISTORY
+// ================================================
+function saveBookingToHistory(schedule, numberOfTickets, passengerName = "Passenger") {
+  const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+
+  const booking = {
+    id: Date.now().toString(),
+    train: schedule.trainName,
+    date: schedule.departureTime,
+    seat: numberOfTickets,
+    passengerName,
+    status: "Confirmed"
+  };
+
+  bookings.push(booking);
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+}
+
+// ================================================
+// BOOK TICKETS (MAIN FUNCTION)
+// ================================================
+export function bookTickets(schedule, numberOfTickets = 1, passengerName = "Passenger") {
+  if (!schedule) {
+    return { success: false, message: "Schedule not found" };
+  }
+
+  if (numberOfTickets <= 0) {
+    return { success: false, message: "Invalid ticket count" };
+  }
+
+  if (numberOfTickets > schedule.availableSeats) {
+    return { success: false, message: `Not enough seats. Available: ${schedule.availableSeats}` };
+  }
+
+  const updatedSchedule = { ...schedule };
+  updatedSchedule.availableSeats -= numberOfTickets;
+
+  if (updatedSchedule.availableSeats === 0) {
+    updatedSchedule.status = "Sold Out";
+  }
+
+  updateScheduleInStorage(updatedSchedule);
+  saveBookingToHistory(updatedSchedule, numberOfTickets, passengerName);
+
+  return {
+    success: true,
+    message: `Booked ${numberOfTickets} seat(s). Remaining: ${updatedSchedule.availableSeats}`,
+    schedule: updatedSchedule
+  };
+}
+
+// ================================================
+// CANCEL BOOKING
+// ================================================
+export function cancelBooking(schedule, numberOfTickets = 1) {
+  if (!schedule) {
+    return { success: false, message: "Schedule not found" };
+  }
+
+  if (numberOfTickets <= 0) {
+    return { success: false, message: "Invalid ticket count" };
+  }
+
+  const updatedSchedule = { ...schedule };
+  updatedSchedule.availableSeats += numberOfTickets;
+
+  if (updatedSchedule.availableSeats > updatedSchedule.seatCapacity) {
+    updatedSchedule.availableSeats = updatedSchedule.seatCapacity;
+  }
+
+  updatedSchedule.status = "Available";
+
+  updateScheduleInStorage(updatedSchedule);
+
+  return {
+    success: true,
+    message: `Cancelled ${numberOfTickets} seat(s). Available now: ${updatedSchedule.availableSeats}`,
+    schedule: updatedSchedule
+  };
+}
+
+// ================================================
+// REBOOK EXISTING TICKET
 // ================================================
 export function rebookExistingTicket(bookingId, additionalTickets) {
   const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
@@ -44,158 +132,50 @@ export function rebookExistingTicket(bookingId, additionalTickets) {
     return { success: false, message: "Booking ID not found." };
   }
 
-  const currentBooking = bookings[bookingIndex];
-
-  if (currentBooking.status === "Cancelled") {
-    return { 
-      success: false, 
-      message: "Cannot add seats to a cancelled booking. Please create a new booking." 
-    };
-  }
-
-  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
-  const schedule = schedules.find(s => s.trainName === currentBooking.train);
+  const booking = bookings[bookingIndex];
+  const schedule = getScheduleById(booking.trainId);
 
   if (!schedule) {
-    return { success: false, message: "Train schedule not found." };
+    return { success: false, message: "Schedule not found." };
   }
 
   if (schedule.availableSeats < additionalTickets) {
-    return { 
-      success: false, 
-      message: `Not enough seats in train. Available: ${schedule.availableSeats}` 
-    };
+    return { success: false, message: `Not enough seats. Available: ${schedule.availableSeats}` };
   }
 
-  // Update seats
   schedule.availableSeats -= additionalTickets;
-  if (schedule.availableSeats === 0) {
-    schedule.status = 'Sold Out';
-  }
-
-  currentBooking.seat += additionalTickets;
+  booking.seat += additionalTickets;
 
   updateScheduleInStorage(schedule);
-  bookings[bookingIndex] = currentBooking;
+  bookings[bookingIndex] = booking;
   localStorage.setItem("bookings", JSON.stringify(bookings));
 
   return {
     success: true,
-    message: `Successfully added ${additionalTickets} seats! Total seats now: ${currentBooking.seat}`,
-    updatedBooking: currentBooking
+    message: `Added ${additionalTickets} seats. Total now: ${booking.seat}`,
+    booking
   };
 }
 
 // ================================================
-// S24: Restore Data
+// ROLLBACK BOOKING
 // ================================================
-function restoreData() {
-  const savedBookings = JSON.parse(localStorage.getItem("savedBookings")) || [];
-  if (savedBookings.length === 0) {
-    alert("No saved data to restore.");
-    return;
+export function bookWithRollback(scheduleId, numberOfTickets = 1) {
+  const backupSchedules = localStorage.getItem("trainSchedules");
+  const backupBookings = localStorage.getItem("bookings");
+
+  try {
+    const schedule = getScheduleById(scheduleId);
+    const result = bookTickets(schedule, numberOfTickets);
+
+    if (!result.success) throw new Error(result.message);
+
+    return result;
+
+  } catch (err) {
+    localStorage.setItem("trainSchedules", backupSchedules);
+    localStorage.setItem("bookings", backupBookings);
+
+    return { success: false, message: "Booking failed: " + err.message };
   }
-  localStorage.setItem("bookings", JSON.stringify(savedBookings));
-  alert("Data restored successfully!");
-}
-
-// ================================================
-// Check Seat Availability
-// ================================================
-export function checkAvailability(schedule) {
-  if (!schedule) {
-    return { available: false, message: 'Schedule not found' };
-  }
-  if (schedule.availableSeats <= 0) {
-    return { 
-      available: false, 
-      message: 'Sorry, this trip is sold out. No seats available.' 
-    };
-  }
-  return { available: true, message: 'Seats available' };
-}
-
-// ================================================
-// Book Tickets
-// ================================================
-export function bookTickets(schedule, numberOfTickets = 1) {
-  if (numberOfTickets <= 0) {
-    return {
-      success: false,
-      message: 'Number of tickets must be greater than zero',
-      schedule: schedule
-    };
-  }
-
-  const availability = checkAvailability(schedule);
-  if (!availability.available) {
-    return {
-      success: false,
-      message: availability.message,
-      schedule: schedule
-    };
-  }
-
-  if (numberOfTickets > schedule.availableSeats) {
-    return {
-      success: false,
-      message: `Not enough seats. Available: ${schedule.availableSeats}`,
-      schedule: schedule
-    };
-  }
-
-  const updatedSchedule = { ...schedule };
-  updatedSchedule.availableSeats -= numberOfTickets;
-
-  updatedSchedule.status = updatedSchedule.availableSeats === 0 ? 'Sold Out' : 'Available';
-
-  updateScheduleInStorage(updatedSchedule);
-  saveBookingToHistory(updatedSchedule, numberOfTickets);
-
-  return {
-    success: true,
-    message: `Booking successful! ${numberOfTickets} ticket(s) booked. Remaining seats: ${updatedSchedule.availableSeats}`,
-    schedule: updatedSchedule,
-    bookingDetails: {
-      ticketsBooked: numberOfTickets,
-      remainingSeats: updatedSchedule.availableSeats,
-      bookingTime: new Date().toISOString()
-    }
-  };
-}
-
-// ================================================
-// Update Schedule in Storage
-// ================================================
-export function updateScheduleInStorage(updatedSchedule) {
-  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
-  const index = schedules.findIndex(s => s.id === updatedSchedule.id);
-  if (index !== -1) {
-    schedules[index] = updatedSchedule;
-    localStorage.setItem('trainSchedules', JSON.stringify(schedules));
-  }
-}
-
-// ================================================
-// Get Schedule by ID
-// ================================================
-export function getScheduleById(scheduleId) {
-  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
-  return schedules.find(s => s.id === scheduleId);
-}
-
-// ================================================
-// Save Booking to History
-// ================================================
-function saveBookingToHistory(schedule, numberOfTickets) {
-  const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-  const booking = {
-    id: Date.now(),
-    train: schedule.trainName || "Train",
-    date: schedule.departureTime || new Date().toLocaleDateString(),
-    seat: numberOfTickets,
-    status: "Confirmed"
-  };
-  bookings.push(booking);
-  localStorage.setItem("bookings", JSON.stringify(bookings));
 }
