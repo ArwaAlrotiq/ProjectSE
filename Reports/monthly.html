@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Booking Report</title>
+    <link rel="stylesheet" href="daily.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #f8fafc; font-family: sans-serif; padding: 20px; }
+        .report-title { text-align: center; color: #1e293b; margin-bottom: 30px; font-size: 24px; }
+        .summary-container { display: flex; justify-content: space-around; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; min-width: 200px; text-align: center; }
+        .card h3 { font-size: 14px; color: #64748b; margin-bottom: 10px; text-transform: uppercase; }
+        .card p { font-size: 22px; font-weight: bold; color: #1e293b; margin: 0; }
+        .chart-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 450px; }
+    </style>
+</head>
+<body onload="generateMonthlyReport()">
+    <h2 class="report-title">Monthly Booking Report</h2>
+    
+    <div class="summary-container">
+        <div class="card">
+            <h3>Total Revenue</h3>
+            <p id="totalRevenueMonth">0 SAR</p>
+        </div>
+        <div class="card">
+            <h3>Total Seats Booked</h3>
+            <p id="totalSeatsMonth">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Bookings</h3>
+            <p id="totalBookingsMonth">0</p>
+        </div>
+        <div class="card">
+            <h3>Total Trains</h3>
+            <p id="totalTrainsMonth">0</p>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="monthlyReportChart"></canvas>
+    </div>
+
+    <script src="monthly.js"></script>
+</body>
+</html>
