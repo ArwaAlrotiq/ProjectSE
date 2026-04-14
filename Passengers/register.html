@@ -173,7 +173,6 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Passport / ID</th>
-            <th>Actions</th>
           </tr>
         </thead>
 
@@ -196,7 +195,7 @@
     <!-- ACTION BUTTONS UNDER TABLE -->
     <div id="action-buttons" class="action-buttons" style="display:none;">
       <span id="selected-passenger-label"></span>
-      <button class="small-btn" id="btn-profile">Passenger Profile</button>
+      <button class="small-btn" id="btn-profile">Manage Passenger Profile</button>
       <button class="small-btn" id="btn-cancel-booking">Cancel Booking</button>
       <button class="small-btn" id="btn-booking">Booking a Flight</button>
       <button class="small-btn" id="btn-extra-seats">Add Extra Seats</button>
@@ -207,8 +206,8 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="register.js"></script>
-
+  <script src="register.js" type="module"></script>
+  <script src="profile.js" type="module"></script>
 </body>
 
 </html>

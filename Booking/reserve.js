@@ -1,11 +1,12 @@
 import { getScheduleById, bookTickets } from './booking.js';
 
 // =====================================
-// 1) Render seats in the UI
+// Render seats in the UI
 // =====================================
 function renderSeats(schedule) {
     const container = document.getElementById("seats-container");
-    if(!container) return;
+    if (!container) return;
+
     container.innerHTML = "";
 
     const totalSeats = schedule.seatCapacity;
@@ -16,10 +17,9 @@ function renderSeats(schedule) {
         seat.classList.add("seat");
         seat.textContent = i;
 
-        // Mark unavailable seats in the UI
         if (i > availableSeats) {
             seat.classList.add("unavailable");
-            seat.disabled = true; // Block user interaction
+            seat.disabled = true;
         }
 
         container.appendChild(seat);
@@ -27,7 +27,7 @@ function renderSeats(schedule) {
 }
 
 // =====================================
-// 2) Load seats when the page opens
+// Load seats on page load
 // =====================================
 document.addEventListener("DOMContentLoaded", () => {
     const schedule = getScheduleById(selectedTrainId);
@@ -35,19 +35,19 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =====================================
-// 3) Reserve button logic
+// Reserve button logic
 // =====================================
 document.getElementById("reserve-btn").addEventListener("click", () => {
-    const scheduleId = selectedTrainId; 
     const tickets = Number(document.getElementById("ticket-count").value);
 
-    const schedule = getScheduleById(scheduleId);
+    const schedule = getScheduleById(selectedTrainId);
+
     const result = bookTickets(schedule, tickets);
 
-    if (!result.success) {
-        alert(result.message);
-    } else {
-        alert(result.message);
+    alert(result.message);
+
+    if (result.success) {
+        renderSeats(result.schedule);
     }
 });
 

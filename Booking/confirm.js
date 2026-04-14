@@ -1,12 +1,10 @@
-import { checkAuth } from '../Login/auth.js';
-checkAuth();
-
 // ================================
 // Load confirmation details
 // from localStorage
 // ================================
 function loadConfirmation() {
   const booking = JSON.parse(localStorage.getItem('lastBooking'));
+  console.log("Loaded booking:", booking);
 
   if (!booking) {
     document.getElementById('confirmation-box').innerHTML =

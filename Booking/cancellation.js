@@ -1,64 +1,7 @@
 /* ============================================================
    Imports
 ============================================================ */
-import { updateScheduleInStorage, getScheduleById } from './booking.js';
-
-/* ============================================================
-   Max Capacity Check
-============================================================ */
-function checkMaxCapacity(schedule, additionalSeats) {
-  const maxCapacity = schedule.maxCapacity || schedule.totalSeats;
-  const newAvailableSeats = schedule.availableSeats + additionalSeats;
-
-  if (newAvailableSeats > maxCapacity) {
-    return {
-      exceedsMax: true,
-      message: `Warning: seats after increment (${newAvailableSeats}) exceed max capacity (${maxCapacity})`,
-      adjustedSeats: maxCapacity
-    };
-  }
-
-  return {
-    exceedsMax: false,
-    adjustedSeats: newAvailableSeats
-  };
-}
-
-/* ============================================================
-   Cancel Booking (Main Logic)
-============================================================ */
-export function cancelBooking(schedule, numberOfTickets = 1) {
-  if (numberOfTickets <= 0) {
-    return {
-      success: false,
-      message: 'Number of tickets must be greater than zero'
-    };
-  }
-
-  if (!schedule) {
-    return {
-      success: false,
-      message: 'Schedule not found'
-    };
-  }
-
-  const updatedSchedule = { ...schedule };
-  const capacityCheck = checkMaxCapacity(updatedSchedule, numberOfTickets);
-
-  updatedSchedule.availableSeats = capacityCheck.adjustedSeats;
-
-  if (schedule.status === 'Sold Out' || schedule.status === 'Full') {
-    updatedSchedule.status = 'Available';
-  }
-
-  updateScheduleInStorage(updatedSchedule);
-
-  return {
-    success: true,
-    message: `Successfully cancelled ${numberOfTickets} ticket(s)! Available seats now: ${updatedSchedule.availableSeats}`,
-    schedule: updatedSchedule
-  };
-}
+import { getScheduleById, cancelBooking } from './booking.js';
 
 /* ============================================================
    Update Booking History
@@ -113,20 +56,20 @@ document.getElementById("cancel-btn").addEventListener("click", () => {
     return;
   }
 
-  const scheduleId = typeof selectedTrainId !== "undefined" ? selectedTrainId : "1";
-  const schedule = getScheduleById(scheduleId);
+  const schedule = getScheduleById(selectedTrainId);
 
   const result = cancelBooking(schedule, ticketsToCancel);
 
-  if (result.success) {
-    const updateResult = updateBookingHistory(bookingIdInput, ticketsToCancel);
-
-    if (updateResult.success) {
-      alert(updateResult.message);
-    } else {
-      alert("Error: " + updateResult.message);
-    }
-  } else {
+  if (!result.success) {
     alert("Error: " + result.message);
+    return;
+  }
+
+  const updateResult = updateBookingHistory(bookingIdInput, ticketsToCancel);
+
+  if (updateResult.success) {
+    alert(updateResult.message);
+  } else {
+    alert("Error: " + updateResult.message);
   }
 });
