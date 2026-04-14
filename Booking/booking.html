@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Seats to Booking</title>
+    <link rel="stylesheet" href="booking.css">
+</head>
+
+<body>
+    <div class="rebook-container">
+        <button onclick="history.back()" class="back-btn">← Back</button>
+        <h1>Add Extra Seats</h1>
+        <p class="subtitle">Increase seats for an existing confirmed booking</p>
+
+        <div class="form-group">
+            <label for="booking-id-rebook">Booking ID:</label>
+            <input type="number" id="booking-id-rebook" placeholder="e.g. 1712345678">
+        </div>
+
+        <div class="form-group">
+            <label for="seat-count-rebook">Number of Additional Seats:</label>
+            <input type="number" id="seat-count-rebook" min="1" value="1">
+        </div>
+
+        <button id="rebook-btn">Add Seats Now</button>
+
+        <div id="message-area"></div>
+
+        <div class="navigation">
+            <a href="../Passengers/history.html">View Booking History</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { rebookExistingTicket } from './booking.js';
+
+        document.getElementById('rebook-btn').addEventListener('click', () => {
+            const bookingId = document.getElementById('booking-id-rebook').value;
+            const count = parseInt(document.getElementById('seat-count-rebook').value);
+            const messageArea = document.getElementById('message-area');
+
+            if (!bookingId || isNaN(count) || count <= 0) {
+                messageArea.innerHTML = <p class="error">Please enter a valid Booking ID and seat count.</p>;
+                return;
+            }
+
+            const result = rebookExistingTicket(bookingId, count);
+
+            if (result.success) {
+                messageArea.innerHTML = <p class="success">${result.message}</p>;
+            } else {
+                messageArea.innerHTML = <p class="error">${result.message}</p>;
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+    background-color: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: #2c3e50;
+}
+
+.summary-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #ffffff;
+    padding: 20px;
+    width: 220px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    color: #34495e;
+    font-size: 18px;
+}
+
+.card p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.chart-container {
+    width: 80%;
+    margin: auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
