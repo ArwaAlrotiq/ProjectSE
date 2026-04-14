@@ -5,6 +5,7 @@ import { getScheduleById, bookTickets } from './booking.js';
 // =====================================
 function renderSeats(schedule) {
     const container = document.getElementById("seats-container");
+    if(!container) return;
     container.innerHTML = "";
 
     const totalSeats = schedule.seatCapacity;

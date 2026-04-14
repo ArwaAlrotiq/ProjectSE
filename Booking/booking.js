@@ -167,7 +167,7 @@ export function bookTickets(schedule, numberOfTickets = 1) {
 // ================================================
 // Update Schedule in Storage
 // ================================================
-function updateScheduleInStorage(updatedSchedule) {
+export function updateScheduleInStorage(updatedSchedule) {
   const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
   const index = schedules.findIndex(s => s.id === updatedSchedule.id);
   if (index !== -1) {
