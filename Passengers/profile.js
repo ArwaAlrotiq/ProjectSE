@@ -1,3 +1,25 @@
+if (window.location.pathname.includes('register.html')) {
+    document.addEventListener('click', (e) => {
+        
+        if (e.target && e.target.textContent.trim() === 'Passenger Profile') {
+            
+            
+            const selectedRadio = document.querySelector('input[type="radio"]:checked');
+            
+            if (selectedRadio) {
+                
+                const row = selectedRadio.closest('tr');
+                const rowId = row.getAttribute('data-testid')?.replace('row-passenger-', '');
+                
+                if (rowId) {
+                    window.location.href = `profile.html?id=${rowId}`;
+                }
+            } else {
+                alert("Please select a passenger first!");
+            }
+        }
+    });
+}
 import { showUpdateConfirmation, showDeleteConfirmation } from './validation.js';
 
 const STORAGE_KEY = 'passengerProfiles';
@@ -19,11 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
    
     function loadCurrentProfile() {
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const passengerId = urlParams.get('id');
+
         const passengers = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        if (passengers.length > 0) {
-           
-            const p = passengers[passengers.length - 1]; 
-            
+        
+       
+        
+        const p = passengers.find(passenger => passenger.id === passengerId) || passengers[passengers.length - 1];
+
+        if (p) {
             fields.id.value = p.id;
             fields.firstName.value = p.firstName;
             fields.lastName.value = p.lastName;
@@ -34,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             fields.phone.value = p.phone;
             fields.passport.value = p.passport;
             fields.emergency.value = p.emergencyContact || '';
+        } else {
+            console.log("No passenger found!");
         }
     }
 
