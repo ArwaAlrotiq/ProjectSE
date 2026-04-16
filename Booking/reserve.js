@@ -1,24 +1,29 @@
 import { getScheduleById, bookTickets } from './booking.js';
 
-// =====================================
-// Get selected train ID from URL
-// =====================================
-function getSelectedTrainId() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("id");
+const currentUserName = localStorage.getItem("selectedPassengerName") || "Passenger";
+const currentPassengerId = localStorage.getItem("selectedPassengerId") || null;
+
+function updateDisplay(trainId) {
+    const display = document.getElementById('available-seats-count');
+    const schedule = getScheduleById(trainId);
+
+    if (schedule && display) {
+        display.textContent = schedule.availableSeats;
+        display.style.color = "#27ae60";
+        renderSeats(schedule);
+    } else if (display) {
+        display.textContent = "Not found";
+        display.style.color = "#e74c3c";
+        const container = document.getElementById("seats-container");
+        if (container) container.innerHTML = "";
+    }
 }
 
-const selectedTrainId = getSelectedTrainId();
-
-// =====================================
-// Render seats in the UI
-// =====================================
 function renderSeats(schedule) {
     const container = document.getElementById("seats-container");
     if (!container || !schedule) return;
 
     container.innerHTML = "";
-
     const totalSeats = Number(schedule.seatCapacity);
     const availableSeats = Number(schedule.availableSeats);
 
@@ -31,73 +36,59 @@ function renderSeats(schedule) {
             seat.classList.add("unavailable");
             seat.disabled = true;
         }
-
         container.appendChild(seat);
     }
 }
 
-// =====================================
-// Load seats on page load
-// =====================================
 document.addEventListener("DOMContentLoaded", () => {
-    const schedule = getScheduleById(selectedTrainId);
-    renderSeats(schedule);
+    const params = new URLSearchParams(window.location.search);
+    const trainId = params.get("id") || localStorage.getItem("selectedTrainId");
+
+    if (trainId) {
+        const inputField = document.getElementById('train-id-input');
+        if (inputField) inputField.value = trainId;
+
+        const schedule = getScheduleById(trainId);
+        const display = document.getElementById('available-seats-count');
+
+        if (schedule && display) {
+            display.textContent = schedule.availableSeats;
+            display.style.color = "#27ae60";
+            renderSeats(schedule);
+        } else if (display) {
+            display.textContent = "Not found";
+            display.style.color = "#e74c3c";
+        }
+    }
 });
 
-// =====================================
-// Reserve button logic
-// =====================================
 document.getElementById("reserve-btn").addEventListener("click", () => {
+    const trainId = document.getElementById('train-id-input').value.trim();
     const tickets = Number(document.getElementById("ticket-count").value);
 
-    const schedule = getScheduleById(selectedTrainId);
-
-    if (!schedule) {
-        alert("Train schedule not found.");
+    if (!trainId) {
+        alert("Please enter a Train ID");
         return;
     }
 
-    const result = bookTickets(schedule, tickets, "Passenger");
+    const schedule = getScheduleById(trainId);
+    if (!schedule) {
+        alert("Train schedule not found in storage!");
+        return;
+    }
 
-    alert(result.message);
+    const result = bookTickets(trainId, tickets, currentUserName, currentPassengerId);
 
     if (result.success) {
-        renderSeats(result.schedule);
-
-        const lastBooking = {
-            id: Date.now().toString(),
-            trainId: schedule.id,
-            train: schedule.trainName,
-            date: schedule.departureTime,
-            seat: tickets,
-            passengerName: "Passenger",
-            totalPrice: schedule.ticketPrice * tickets,
-            status: "Confirmed"
-        };
-
-        localStorage.setItem("lastBooking", JSON.stringify(lastBooking));
-
+        localStorage.setItem("latestBooking", JSON.stringify(result.booking));
         window.location.href = "confirm.html";
+    }
+    else {
+        alert(result.message);
     }
 });
 
-// =====================================
-// Live seat availability display
-// =====================================
-const trainInput = document.getElementById('train-id-input');
-const seatsDisplay = document.getElementById('available-seats-count');
-
-if (trainInput) {
-    trainInput.addEventListener('input', () => {
-        const trainId = trainInput.value.trim();
-        const schedule = getScheduleById(trainId);
-
-        if (schedule) {
-            seatsDisplay.textContent = schedule.availableSeats;
-            seatsDisplay.style.color = schedule.availableSeats > 0 ? "#27ae60" : "#e74c3c";
-        } else {
-            seatsDisplay.textContent = trainId === "" ? "-" : "Not found";
-            seatsDisplay.style.color = "#e74c3c";
-        }
-    });
-}
+document.getElementById('train-id-input').addEventListener('input', (e) => {
+    const trainId = e.target.value.trim();
+    updateDisplay(trainId);
+});

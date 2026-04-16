@@ -55,10 +55,11 @@ body {
 }
 
 .chart-wrapper {
-    background: white;
+    background: #fff;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    text-align: center;
     height: 300px;
     display: flex;
     flex-direction: column;
@@ -78,22 +79,24 @@ canvas {
 /* =========================================
    Occupancy Overview Section
 ========================================= */
-#occupancy-container {
+#utilization-table,
+#occupancy-container,
+#occupancyChart {
     width: 80%;
     margin: 30px auto;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: block;
 }
 
 /* Occupancy Table */
+#utilization-table table,
 #occupancy-container table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
 }
 
+#utilization-table th,
+#utilization-table td,
 #occupancy-container th,
 #occupancy-container td {
     padding: 12px;
@@ -101,12 +104,14 @@ canvas {
     text-align: center;
 }
 
+#utilization-table th,
 #occupancy-container th {
     background-color: #f0f3f5;
     color: #34495e;
     font-weight: bold;
 }
 
+#utilization-table tr:hover,
 #occupancy-container tr:hover {
     background-color: #f9f9f9;
 }

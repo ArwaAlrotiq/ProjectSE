@@ -18,11 +18,9 @@ function loadHistory() {
     const schedule = schedules.find(s => s.id == booking.trainId);
 
     const trainName = schedule ? schedule.trainName : "—";
-    const seats = booking.seatCount || booking.numberOfSeats || 1;
-    const price = booking.totalPrice || (schedule ? schedule.ticketPrice * seats : "—");
-    const date = booking.bookingTime
-      ? new Date(booking.bookingTime).toLocaleDateString()
-      : booking.date || "—";
+    const seats = booking.seat;  
+    const price = booking.totalPrice;  
+    const date = booking.date || "—";
 
     const row = document.createElement("tr");
     row.innerHTML = `
@@ -35,6 +33,12 @@ function loadHistory() {
     `;
     tableBody.appendChild(row);
   });
+}
+function clearBookingHistory() {
+  if (confirm("Are you sure you want to delete all booking history?")) {
+    localStorage.removeItem("bookings");
+    loadHistory();
+  }
 }
 
 document.addEventListener("DOMContentLoaded", loadHistory);

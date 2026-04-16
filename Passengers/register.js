@@ -275,6 +275,8 @@ function attachRadioEvents() {
     radio.addEventListener("change", () => {
       selectedPassengerId = radio.dataset.id;
       localStorage.setItem("selectedPassengerId", selectedPassengerId);
+      const passenger = getAllPassengers().find(p => p.id === selectedPassengerId);
+      localStorage.setItem("selectedPassengerName", passenger.firstName + " " + passenger.lastName);
       updateActionPanel();
     });
   });
@@ -332,43 +334,12 @@ function updateActionPanel() {
   document.getElementById("btn-profile").onclick = () =>
     (window.location.href = `../Passengers/profile.html?id=${selectedPassengerId}`);
 
-  document.getElementById("btn-cancel-booking").onclick = () =>
-    (window.location.href = `../Booking/cancellation.html?id=${selectedPassengerId}`);
-
   document.getElementById("btn-booking").onclick = () =>
-    (window.location.href = `../Booking/reserve.html?id=${selectedPassengerId}`);
-
-  document.getElementById("btn-extra-seats").onclick = () =>
-    (window.location.href = `../Booking/booking.html?id=${selectedPassengerId}`);
-
-  // ========================
-  // Confirm Booking
-  // ========================
-  document.getElementById("btn-confirm").onclick = () => {
-    const passenger = getAllPassengers().find(
-      (p) => p.id === selectedPassengerId,
-    );
-
-    if (!passenger) {
-      alert("Passenger not found");
-      return;
-    }
-
-    const bookingData = {
-      id: Date.now().toString(),
-      passengerName: passenger.firstName + " " + passenger.lastName,
-      train: "—",
-      date: new Date().toLocaleDateString(),
-      seat: "1",
-      totalPrice: "—",
-      status: "Confirmed",
-    };
-
-    localStorage.setItem("lastBooking", JSON.stringify(bookingData));
-
-    window.location.href = "../Booking/confirm.html";
+    (window.location.href = `../Passengers/select-train.html?id=${selectedPassengerId}`);
+  document.getElementById("btn-manage").onclick = () => {
+  window.location.href = "../Passengers/passenger-bookings.html";
+};
   };
-}
 
 // ========================
 // Event Listeners

@@ -13,24 +13,21 @@
         <h1>Book Your Trip</h1>
         <p>Select number of tickets to reserve</p>
 
-    <div class="input-group">
-        <label for="train-id-input">Train ID:</label>
-        <input type="number" id="train-id-input" placeholder="Enter Train ID">
-        
-        <div id="availability-info" style="margin-top: 8px; font-size: 0.9em;">
-          <span style="color: #666;">Available Seats: </span>
-          <span id="available-seats-count" style="font-weight: bold; color: #27ae60;">-</span>
+        <div class="input-group">
+            <label for="train-id-input">Train ID:</label>
+            <input type="text" id="train-id-input" placeholder="Loading ID..." readonly>
+
+            <div id="availability-info" style="margin-top: 8px; font-size: 0.9em;">
+                <span style="color: #666;">Available Seats: </span>
+                <span id="available-seats-count" style="font-weight: bold; color: #27ae60;">-</span>
+            </div>
         </div>
-    </div>
+
         <label for="ticket-count">Number of Tickets:</label>
         <input type="number" id="ticket-count" value="1" min="1">
 
         <button id="reserve-btn">Confirm Reservation</button>
     </div>
-
-    <script>
-        var selectedTrainId = "1"; 
-    </script>
     <script type="module" src="reserve.js"></script>
 </body>
 

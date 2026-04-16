@@ -10,13 +10,14 @@ function saveSchedules(schedules) {
 }
 
 export function getScheduleById(id) {
-  const schedules = loadSchedules();
-  return schedules.find(s => s.id == id);
+  const schedules = JSON.parse(localStorage.getItem('trainSchedules') || '[]');
+  return schedules.find(s => String(s.id).trim() === String(id).trim());
 }
 
 export function updateScheduleInStorage(updatedSchedule) {
   const schedules = loadSchedules();
-  const index = schedules.findIndex(s => s.id == updatedSchedule.id);
+  const index = schedules.findIndex(s => String(s.id) === String(updatedSchedule.id));
+
 
   if (index !== -1) {
     schedules[index] = updatedSchedule;
@@ -49,76 +50,101 @@ function saveBookingToHistory(schedule, numberOfTickets, passengerName = "Passen
     id: Date.now().toString(),
     trainId: schedule.id,
     train: schedule.trainName,
-    date: schedule.departureTime,
+    date: new Date().toISOString(),
     seat: numberOfTickets,
     passengerName,
+    totalPrice: (schedule.ticketPrice || 0) * numberOfTickets,
     status: "Confirmed"
   };
 
   bookings.push(booking);
   localStorage.setItem("bookings", JSON.stringify(bookings));
+  return booking;
 }
 
 // ================================================
 // BOOK TICKETS (MAIN FUNCTION)
 // ================================================
-export function bookTickets(schedule, numberOfTickets = 1, passengerName = "Passenger") {
+export function bookTickets(trainId, tickets, passengerName, passengerId) {
+
+  passengerName = passengerName === "Passenger"
+    ? localStorage.getItem("selectedPassengerName")
+    : passengerName;
+
+  let schedules = JSON.parse(localStorage.getItem("trainSchedules") || "[]");
+  let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+
+  const schedule = schedules.find(s => s.id == trainId);
   if (!schedule) {
-    return { success: false, message: "Schedule not found" };
+    return { success: false, message: "Train schedule not found" };
   }
 
-  if (numberOfTickets <= 0) {
-    return { success: false, message: "Invalid ticket count" };
+  if (schedule.availableSeats < tickets) {
+    return { success: false, message: "Not enough seats available" };
   }
 
-  if (numberOfTickets > schedule.availableSeats) {
-    return { success: false, message: `Not enough seats. Available: ${schedule.availableSeats}` };
-  }
+  schedule.availableSeats -= tickets;
 
-  const updatedSchedule = { ...schedule };
-  updatedSchedule.availableSeats -= numberOfTickets;
-
-  updatedSchedule.status =
-    updatedSchedule.availableSeats === 0 ? "Sold Out" : "Available";
-
-  updateScheduleInStorage(updatedSchedule);
-  saveBookingToHistory(updatedSchedule, numberOfTickets, passengerName);
-
-  return {
-    success: true,
-    message: `Booked ${numberOfTickets} seat(s). Remaining: ${updatedSchedule.availableSeats}`,
-    schedule: updatedSchedule
+  const booking = {
+    id: Date.now(),
+    passengerId: passengerId,
+    passengerName: passengerName,
+    trainId: trainId,
+    trainName: schedule.trainName,
+    date: new Date().toISOString(),
+    seat: tickets,
+    ticketPrice: schedule.ticketPrice,
+    totalPrice: tickets * schedule.ticketPrice,
+    status: "Confirmed"
   };
+
+  bookings.push(booking);
+
+  localStorage.setItem("trainSchedules", JSON.stringify(schedules));
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+  localStorage.setItem("latestBooking", JSON.stringify(booking));
+
+  return { success: true, booking };
 }
 
 // ================================================
 // CANCEL BOOKING
 // ================================================
-export function cancelBooking(schedule, numberOfTickets = 1) {
+export function cancelBooking(bookingId, ticketsToCancel) {
+  let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+  let schedules = JSON.parse(localStorage.getItem("trainSchedules") || "[]");
+
+  const bookingIndex = bookings.findIndex(b => b.id == bookingId);
+  if (bookingIndex === -1) {
+    return { success: false, message: "Booking ID not found." };
+  }
+
+  const booking = bookings[bookingIndex];
+  const schedule = schedules.find(s => s.id == booking.trainId);
+
   if (!schedule) {
-    return { success: false, message: "Schedule not found" };
+    return { success: false, message: "Train schedule not found." };
   }
 
-  if (numberOfTickets <= 0) {
-    return { success: false, message: "Invalid ticket count" };
+  if (ticketsToCancel > booking.seat) {
+    return { success: false, message: `You only booked ${booking.seat} seats.` };
   }
 
-  const updatedSchedule = { ...schedule };
-  updatedSchedule.availableSeats += numberOfTickets;
+  schedule.availableSeats += ticketsToCancel;
+  schedule.status = schedule.availableSeats === 0 ? "Sold Out" : "Available";
 
-  if (updatedSchedule.availableSeats > updatedSchedule.seatCapacity) {
-    updatedSchedule.availableSeats = updatedSchedule.seatCapacity;
-  }
+  booking.seat -= ticketsToCancel;
+  booking.totalPrice = booking.seat * booking.ticketPrice;
+  booking.status = booking.seat === 0 ? "Cancelled" : "Confirmed";
 
-  updatedSchedule.status =
-    updatedSchedule.availableSeats === 0 ? "Sold Out" : "Available";
-
-  updateScheduleInStorage(updatedSchedule);
+  bookings[bookingIndex] = booking;
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+  localStorage.setItem("trainSchedules", JSON.stringify(schedules));
 
   return {
     success: true,
-    message: `Cancelled ${numberOfTickets} seat(s). Available now: ${updatedSchedule.availableSeats}`,
-    schedule: updatedSchedule
+    message: `Cancelled ${ticketsToCancel} seat(s). Remaining: ${booking.seat}`,
+    booking
   };
 }
 
@@ -145,15 +171,15 @@ export function rebookExistingTicket(bookingId, additionalTickets) {
   }
 
   schedule.availableSeats -= additionalTickets;
-  schedule.status =
-    schedule.availableSeats === 0 ? "Sold Out" : "Available";
+  schedule.status = schedule.availableSeats === 0 ? "Sold Out" : "Available";
+  updateScheduleInStorage(schedule);
 
   booking.seat += additionalTickets;
+  booking.totalPrice = booking.seat * (booking.ticketPrice || schedule.ticketPrice || 0);
 
-  updateScheduleInStorage(schedule);
   bookings[bookingIndex] = booking;
   localStorage.setItem("bookings", JSON.stringify(bookings));
-
+  localStorage.setItem("latestBooking", JSON.stringify(booking));
   return {
     success: true,
     message: `Added ${additionalTickets} seats. Total now: ${booking.seat}`,

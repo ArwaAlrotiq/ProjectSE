@@ -5,32 +5,22 @@ function generateMonthlyReport() {
     let totalSeats = 0;
     let totalConfirmed = 0;
     const trainIds = new Set();
-    const monthlyStats = {};
+
+    const monthlyStats = new Array(12).fill(0);
 
     bookings.forEach(booking => {
         if (booking.status === "Confirmed") {
             totalConfirmed++;
 
-            const date = booking.bookingTime
-                ? new Date(booking.bookingTime)
-                : new Date();
+            const date = booking.date ? new Date(booking.date) : new Date();
+            const monthIndex = date.getMonth(); // 0 → Jan ... 11 → Dec
 
-            const monthLabel = date.toLocaleString('en-US', {
-                month: 'long',
-                year: 'numeric'
-            });
+            monthlyStats[monthIndex]++;
 
-            if (!monthlyStats[monthLabel]) monthlyStats[monthLabel] = 0;
-            monthlyStats[monthLabel] += 1;
-
-            const price = parseFloat(booking.totalPrice) || 0;
-
-            const seats =
-                parseInt(booking.seatCount) ||
-                parseInt(booking.numberOfSeats) ||
-                1;
-
+            const price = Number(booking.totalPrice) || 0;
             totalRevenue += price;
+
+            const seats = Number(booking.seat) || 1;
             totalSeats += seats;
 
             if (booking.trainId) trainIds.add(booking.trainId);
@@ -49,10 +39,10 @@ function generateMonthlyReport() {
     document.getElementById("totalTrainsMonth").textContent =
         trainIds.size.toLocaleString('en-US');
 
-    const labels = Object.keys(monthlyStats);
-    const data = Object.values(monthlyStats);
+    const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    renderMonthlyChart(labels, data);
+    renderMonthlyChart(labels, monthlyStats);
 }
 
 function renderMonthlyChart(labels, data) {
@@ -68,9 +58,12 @@ function renderMonthlyChart(labels, data) {
                 label: "Monthly Bookings",
                 data: data,
                 fill: true,
-                backgroundColor: "rgba(59, 130, 246, 0.1)",
+                backgroundColor: "rgba(59, 130, 246, 0.2)",
                 borderColor: "#3b82f6",
-                tension: 0.4
+                borderWidth: 2,
+                tension: 0.4,
+                pointRadius: 4,
+                pointBackgroundColor: "#3b82f6"
             }]
         },
         options: {
@@ -80,10 +73,7 @@ function renderMonthlyChart(labels, data) {
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        stepSize: 1,
-                        callback: function (value) {
-                            if (value % 1 === 0) return value;
-                        }
+                        precision: 0
                     }
                 }
             }

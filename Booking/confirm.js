@@ -1,51 +1,46 @@
-// ================================
-// Load confirmation details
-// from localStorage (lastBooking)
-// ================================
 function loadConfirmation() {
-  const booking = JSON.parse(localStorage.getItem('lastBooking'));
-  console.log("Loaded booking:", booking);
+  const booking = JSON.parse(localStorage.getItem('latestBooking'));
 
   if (!booking) {
     document.getElementById('confirmation-box').innerHTML =
       '<p style="text-align:center;color:red;">No booking found.</p>';
     return;
   }
+  const storedPassengerName = localStorage.getItem('selectedPassengerName');
 
   document.getElementById('passenger-name').textContent =
-    booking.passengerName || '—';
+    booking.passengerName && booking.passengerName !== "Passenger"
+      ? booking.passengerName
+      : storedPassengerName || '—';
+
 
   document.getElementById('train-name').textContent =
-    booking.train || '—';
+    booking.trainName || '—';
 
   document.getElementById('booking-date').textContent =
     booking.date || '—';
 
   document.getElementById('seat-count').textContent =
-    booking.seat || '—';
+    booking.seat ?? '—';
 
   document.getElementById('total-price').textContent =
-    booking.totalPrice ? booking.totalPrice + ' SAR' : '—';
+    booking.totalPrice != null ? booking.totalPrice + ' SAR' : '—';
 
   document.getElementById('booking-id').textContent =
     booking.id || '—';
 
-  document.getElementById('status').textContent =
-    booking.status || 'Confirmed';
+  const statusEl = document.getElementById('status');
+  statusEl.textContent = 'Confirmed';
+  statusEl.classList.remove('status-cancelled');
+  statusEl.classList.add('status-confirmed');
 }
 
-// ================================
-// Print confirmation
-// ================================
 function printConfirmation() {
   window.print();
 }
 
-// ================================
-// Download confirmation as PDF
-// ================================
 async function downloadConfirmationPDF() {
-  const booking = JSON.parse(localStorage.getItem('lastBooking'));
+  const booking = JSON.parse(localStorage.getItem('latestBooking'));
   if (!booking) return;
 
   const { jsPDF } = window.jspdf;
@@ -61,7 +56,7 @@ async function downloadConfirmationPDF() {
   const lines = [
     `Booking ID    : ${booking.id}`,
     `Passenger     : ${booking.passengerName}`,
-    `Train         : ${booking.train}`,
+    `Train         : ${booking.trainName}`,
     `Date          : ${booking.date}`,
     `Seats Booked  : ${booking.seat}`,
     `Total Price   : ${booking.totalPrice} SAR`,
@@ -77,14 +72,4 @@ async function downloadConfirmationPDF() {
   doc.save(`booking_${booking.id}.pdf`);
 }
 
-// ================================
-// Go back
-// ================================
-function goBack() {
-  window.location.href = 'reserve.html';
-}
-
-// ================================
-// Run on load
-// ================================
 loadConfirmation();

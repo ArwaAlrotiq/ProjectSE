@@ -21,8 +21,15 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(6px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(6px);
+            }
         }
     </style>
 </head>
@@ -55,10 +62,12 @@
 
     <div id="chartsContainer" class="charts-grid-container"></div>
 
+
     <!-- ================================
          OCCUPANCY OVERVIEW
     ================================= -->
     <h2 style="margin-top: 40px;">Occupancy Overview</h2>
+    <div id="utilization-table"></div>
 
     <!-- Occupancy Table -->
     <div id="occupancy-container"></div>
@@ -72,4 +81,5 @@
     <script src="trends.js"></script>
 
 </body>
+
 </html>

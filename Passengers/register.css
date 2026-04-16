@@ -543,3 +543,18 @@ tbody tr:hover {
 .small-btn.delete:hover {
   background: #c0392b;
 }
+.home-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #2980b9;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.home-btn:hover {
+  background: #1e3c72;
+}

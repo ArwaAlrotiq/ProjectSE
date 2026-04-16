@@ -21,9 +21,8 @@ function handleLogin() {
 
     if (username === correct.user && password === correct.pass) {
         localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("loggedRole", role);
-
-        window.location.href = "../Dashboard/dashboard.html";
+        localStorage.setItem("userRole", role);
+        window.location.href = "../index.html";
     } else {
         errorMsg.textContent = "Invalid username or password";
         errorMsg.classList.remove("hidden");

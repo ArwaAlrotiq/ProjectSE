@@ -1,88 +1,38 @@
-/* ============================================================
-   Imports
-============================================================ */
-import { getScheduleById, cancelBooking } from './booking.js';
+import { cancelBooking } from './booking.js';
 
-/* ============================================================
-   Update Booking History
-============================================================ */
-function updateBookingHistory(bookingId, countToRemove) {
-  let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
-  let found = false;
-  let message = "";
+document.addEventListener("DOMContentLoaded", () => {
 
-  bookings = bookings.map(booking => {
-    if (booking.id == bookingId) {
-      found = true;
+  const bookingInput = document.getElementById("booking-id-input");
+  const cancelBtn = document.getElementById("cancel-btn");
+  const messageArea = document.getElementById("message-area");
 
-      if (countToRemove > booking.seat) {
-        message = `You only have ${booking.seat} seats booked. Cannot cancel ${countToRemove}.`;
-        return booking;
-      }
+  const directId = localStorage.getItem("directBookingId");
+  if (directId) {
+    bookingInput.value = directId;
+  }
 
-      booking.seat -= countToRemove;
+  cancelBtn.addEventListener("click", () => {
 
-      if (booking.seat === 0) {
-        booking.status = "Cancelled";
-        message = "All seats cancelled successfully.";
-      } else {
-        message = `${countToRemove} seats cancelled. Remaining: ${booking.seat}`;
-      }
+    const bookingId = bookingInput.value.trim();
+    const ticketsToCancel = Number(document.getElementById("ticket-count").value);
+
+    if (!bookingId || ticketsToCancel <= 0) {
+      messageArea.innerHTML = `<p class="error">Please enter a valid number of tickets.</p>`;
+      return;
     }
-    return booking;
+
+    const result = cancelBooking(bookingId, ticketsToCancel);
+
+    if (result.success) {
+
+      localStorage.setItem("latestBooking", JSON.stringify(result.booking));
+
+      window.location.href = "confirm.html";
+
+    } else {
+      messageArea.innerHTML = `<p class="error">${result.message}</p>`;
+    }
+
   });
 
-  if (!found) {
-    return { success: false, message: "Booking ID not found." };
-  }
-
-  if (message.includes("Cannot cancel")) {
-    return { success: false, message: message };
-  }
-
-  localStorage.setItem("bookings", JSON.stringify(bookings));
-  return { success: true, message: message };
-}
-
-/* ============================================================
-   Cancel Button Handler
-============================================================ */
-document.getElementById("cancel-btn").addEventListener("click", () => {
-  const bookingIdInput = document.getElementById("booking-id-input").value.trim();
-  const ticketsToCancel = Number(document.getElementById("ticket-count").value);
-
-  if (!bookingIdInput || ticketsToCancel <= 0) {
-    alert("Please enter a valid Booking ID and number of tickets.");
-    return;
-  }
-
-  const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
-  const booking = bookings.find(b => b.id == bookingIdInput);
-
-  if (!booking) {
-    alert("Booking ID not found.");
-    return;
-  }
-
-  const schedule = getScheduleById(booking.trainId);
-
-  if (!schedule) {
-    alert("Train schedule not found.");
-    return;
-  }
-
-  const result = cancelBooking(schedule, ticketsToCancel);
-
-  if (!result.success) {
-    alert("Error: " + result.message);
-    return;
-  }
-
-  const updateResult = updateBookingHistory(bookingIdInput, ticketsToCancel);
-
-  if (updateResult.success) {
-    alert(updateResult.message);
-  } else {
-    alert("Error: " + updateResult.message);
-  }
 });

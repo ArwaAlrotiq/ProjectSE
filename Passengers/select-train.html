@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Train</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background: #2a5298;
+      color: white;
+    }
+
+    tr:hover {
+      background: #f1f1f1;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #1e874b;
+    }
+
+    .back-btn {
+      margin-bottom: 20px;
+      display: inline-block;
+      background: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="btn back-btn" href="../Passengers/register.html">← Back</a>
+
+  <h1>Select a Train</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Train Name</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+        <th>Destination</th>
+        <th>Price</th>
+        <th>Seats</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody id="train-table-body"></tbody>
+  </table>
+
+<script src="select-train.js" type="module"></script>
+
+</body>
+</html>

@@ -25,12 +25,16 @@ function generateWeeklyReport() {
             if (!weeklyStats[weekLabel]) weeklyStats[weekLabel] = 0;
             weeklyStats[weekLabel] += 1;
 
-            const price = parseFloat(booking.totalPrice) || 0;
+            const seats = Number(
+                booking.seat ??
+                booking.seatCount ??
+                booking.numberOfSeats ??
+                1
+            );
 
-            const seats =
-                parseInt(booking.seatCount) ||
-                parseInt(booking.numberOfSeats) ||
-                1;
+            const price = booking.totalPrice != null
+                ? Number(booking.totalPrice)
+                : Number(booking.ticketPrice || 0) * seats;
 
             totalRevenue += price;
             totalSeats += seats;

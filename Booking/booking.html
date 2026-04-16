@@ -15,43 +15,54 @@
         <p class="subtitle">Increase seats for an existing confirmed booking</p>
 
         <div class="form-group">
-            <label for="booking-id-rebook">Booking ID:</label>
-            <input type="number" id="booking-id-rebook" placeholder="e.g. 1712345678">
-        </div>
 
-        <div class="form-group">
+            <!-- Hidden booking ID -->
+            <input type="hidden" id="booking-id">
+
             <label for="seat-count-rebook">Number of Additional Seats:</label>
             <input type="number" id="seat-count-rebook" min="1" value="1">
+
+            <button id="rebook-btn">Add Seats Now</button>
+
+            <div id="message-area"></div>
+
         </div>
-
-        <button id="rebook-btn">Add Seats Now</button>
-
-        <div id="message-area"></div>
-
     </div>
 
     <script type="module">
         import { rebookExistingTicket } from './booking.js';
 
+        document.addEventListener("DOMContentLoaded", () => {
+            const directId = localStorage.getItem("directBookingId");
+            if (directId) {
+                document.getElementById("booking-id").value = directId;
+            }
+        });
+
         document.getElementById('rebook-btn').addEventListener('click', () => {
-            const bookingId = document.getElementById('booking-id-rebook').value;
+            const bookingId = document.getElementById('booking-id').value;
             const count = parseInt(document.getElementById('seat-count-rebook').value);
             const messageArea = document.getElementById('message-area');
 
             if (!bookingId || isNaN(count) || count <= 0) {
-                messageArea.innerHTML = <p class="error">Please enter a valid Booking ID and seat count.</p>;
+                messageArea.innerHTML = `<p class="error">Please enter a valid seat count.</p>`;
                 return;
             }
 
             const result = rebookExistingTicket(bookingId, count);
 
             if (result.success) {
-                messageArea.innerHTML = <p class="success">${result.message}</p>;
+
+                localStorage.setItem("latestBooking", JSON.stringify(result.booking));
+
+                window.location.href = "confirm.html";
+
             } else {
-                messageArea.innerHTML = <p class="error">${result.message}</p>;
+                messageArea.innerHTML = `<p class="error">${result.message}</p>`;
             }
         });
     </script>
+
 </body>
 
 </html>

@@ -14,7 +14,7 @@ h1 {
   width: 100%;
   border-collapse: collapse;
   background: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #historyTable th,
@@ -32,4 +32,18 @@ h1 {
 
 #historyTable tr:nth-child(even) {
   background-color: #f2f2f2;
+}
+
+.clear-btn {
+  background: #c0392b;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  margin-bottom: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.clear-btn:hover {
+  background: #e74c3c;
 }

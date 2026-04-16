@@ -18,8 +18,17 @@ function generateComprehensiveReport() {
         if (booking.status === "Confirmed") {
             confirmedBookings++;
 
-            const seats = booking.seatCount || booking.numberOfSeats || 1;
-            const price = booking.totalPrice || booking.ticketPrice || 0;
+            const seats = Number(
+                booking.seat ??
+                booking.seatCount ??
+                booking.numberOfSeats ??
+                1
+            );
+
+            const pricePerSeat = Number(booking.ticketPrice || 0);
+            const price = booking.totalPrice != null
+                ? Number(booking.totalPrice)
+                : pricePerSeat * seats;
 
             totalSeats += seats;
             totalRevenue += price;
