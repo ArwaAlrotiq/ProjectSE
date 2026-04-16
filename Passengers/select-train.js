@@ -34,7 +34,7 @@ function renderTrains() {
             <td>${schedule.arrivalTime}</td>
             <td>${schedule.destination}</td>
             <td>${schedule.ticketPrice} SAR</td>
-            <td>${bookedSeats}/${schedule.seatCapacity}</td>
+<td>${availableSeats}/${schedule.seatCapacity}</td>
             <td>
                 <button class="btn" onclick="selectTrain('${schedule.id}')"
                     ${availableSeats <= 0 ? "disabled" : ""}>
