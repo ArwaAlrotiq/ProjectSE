@@ -146,7 +146,7 @@ export function cancelBooking(bookingId, ticketsToCancel) {
   return {
     success: true,
     message: `Cancelled ${ticketsToCancel} seat(s). Remaining: ${booking.seat}`,
-    booking
+    booking: bookings[bookingIndex]
   };
 }
 
@@ -163,6 +163,12 @@ export function rebookExistingTicket(bookingId, additionalTickets) {
 
   const booking = bookings[bookingIndex];
   const schedule = getScheduleById(booking.trainId);
+if (booking.seat === 0 || booking.status === "Cancelled") {
+  return {
+    success: false,
+    message: "This booking is fully cancelled. Please create a new booking."
+  };
+}
 
   if (!schedule) {
     return { success: false, message: "Schedule not found." };
@@ -216,40 +222,40 @@ export function bookWithRollback(scheduleId, numberOfTickets = 1) {
 // ===============================
 if (document.getElementById("rebook-btn")) {
 
-    const bookingIdInput = document.getElementById("booking-id");
-    const seatCountInput = document.getElementById("seat-count-rebook");
-    const messageArea = document.getElementById("message-area");
+  const bookingIdInput = document.getElementById("booking-id");
+  const seatCountInput = document.getElementById("seat-count-rebook");
+  const messageArea = document.getElementById("message-area");
 
-    const latestBooking = JSON.parse(localStorage.getItem("latestBooking"));
-    if (latestBooking) {
-        bookingIdInput.value = latestBooking.id;
+  const latestBooking = JSON.parse(localStorage.getItem("latestBooking"));
+  if (latestBooking) {
+    bookingIdInput.value = latestBooking.id;
+  }
+
+  document.getElementById("rebook-btn").addEventListener("click", () => {
+    const bookingId = bookingIdInput.value;
+    const additionalSeats = Number(seatCountInput.value);
+
+    if (!bookingId) {
+      messageArea.innerHTML = `<p style="color:red;">Booking ID missing.</p>`;
+      return;
     }
 
-    document.getElementById("rebook-btn").addEventListener("click", () => {
-        const bookingId = bookingIdInput.value;
-        const additionalSeats = Number(seatCountInput.value);
+    if (additionalSeats < 1) {
+      messageArea.innerHTML = `<p style="color:red;">Enter at least 1 seat.</p>`;
+      return;
+    }
 
-        if (!bookingId) {
-            messageArea.innerHTML = `<p style="color:red;">Booking ID missing.</p>`;
-            return;
-        }
+    const result = rebookExistingTicket(bookingId, additionalSeats);
 
-        if (additionalSeats < 1) {
-            messageArea.innerHTML = `<p style="color:red;">Enter at least 1 seat.</p>`;
-            return;
-        }
+    if (result.success) {
+      messageArea.innerHTML = `<p style="color:green;">${result.message}</p>`;
+      localStorage.setItem("latestBooking", JSON.stringify(result.booking));
+      setTimeout(() => {
+        window.location.href = "../Booking/confirm.html";
+      }, 800);
 
-        const result = rebookExistingTicket(bookingId, additionalSeats);
-
-        if (result.success) {
-            messageArea.innerHTML = `<p style="color:green;">${result.message}</p>`;
-            localStorage.setItem("latestBooking", JSON.stringify(result.booking));
-            setTimeout(() => {
-    window.location.href = "../Booking/confirm.html";
-}, 800);
-
-        } else {
-            messageArea.innerHTML = `<p style="color:red;">${result.message}</p>`;
-        }
-    });
+    } else {
+      messageArea.innerHTML = `<p style="color:red;">${result.message}</p>`;
+    }
+  });
 }

@@ -23,7 +23,7 @@ function displayHistoricalSchedules() {
     schedules.forEach(schedule => {
         const row = `
             <tr>
-                <td>${schedule.trainName}</td>
+                <td>${schedule.trainName || "Unknown"}</td>
                 <td>${schedule.destination}</td>
                 <td>${schedule.departureTime}</td>
                 <td>${schedule.arrivalTime}</td>
@@ -40,11 +40,11 @@ function displayHistoricalSchedules() {
 // Search Historical Schedules
 // ===============================
 function searchHistoricalSchedules() {
-    const query = document.getElementById("searchTrain").value.toLowerCase();
+    const query = document.getElementById("searchTrain").value.toLowerCase().trim();
     const schedules = JSON.parse(localStorage.getItem("historicalSchedules")) || [];
 
     const filtered = schedules.filter(schedule =>
-        schedule.trainName.toLowerCase().includes(query)
+        (schedule.trainName || "").toLowerCase().includes(query)
     );
 
     const tableBody = document.getElementById("historicalTableBody");
@@ -62,7 +62,7 @@ function searchHistoricalSchedules() {
     filtered.forEach(schedule => {
         const row = `
             <tr>
-                <td>${schedule.trainName}</td>
+                <td>${schedule.trainName || "Unknown"}</td>
                 <td>${schedule.destination}</td>
                 <td>${schedule.departureTime}</td>
                 <td>${schedule.arrivalTime}</td>
@@ -74,9 +74,17 @@ function searchHistoricalSchedules() {
         tableBody.innerHTML += row;
     });
 }
+
+// ===============================
+// Clear All History
+// ===============================
 function clearHistory() {
     if (confirm("Are you sure you want to delete all historical records?")) {
         localStorage.removeItem("historicalSchedules");
         displayHistoricalSchedules();
     }
 }
+
+// Make function available to HTML button
+window.clearHistory = clearHistory;
+window.searchHistoricalSchedules = searchHistoricalSchedules;

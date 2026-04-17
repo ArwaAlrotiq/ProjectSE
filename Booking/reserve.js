@@ -44,7 +44,7 @@ function renderSeats(schedule) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
-    const trainId = params.get("id") || localStorage.getItem("selectedTrainId");
+    const trainId = Number(params.get("id") || localStorage.getItem("selectedTrainId"));
 
     if (trainId) {
         const inputField = document.getElementById('train-id-input');
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.getElementById("reserve-btn").addEventListener("click", () => {
-    const trainId = document.getElementById('train-id-input').value.trim();
+    const trainId = Number(document.getElementById('train-id-input').value.trim());
     const tickets = Number(document.getElementById("ticket-count").value);
 
     if (!trainId) {

@@ -213,12 +213,14 @@ function renderTable(query = "") {
   const passengers = getAllPassengers();
   const q = query.toLowerCase();
 
-  const filtered = passengers.filter(
-    (p) =>
-      `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
-      p.email.toLowerCase().includes(q) ||
-      p.passport.toLowerCase().includes(q),
-  );
+const filtered = passengers.filter(
+  (p) =>
+    (`${p.firstName || ""} ${p.lastName || ""}`).toLowerCase().includes(q) ||
+    (p.email || "").toLowerCase().includes(q) ||
+    (p.passport || "").toLowerCase().includes(q)
+);
+
+
 
   tableBody.innerHTML = "";
 
@@ -348,6 +350,10 @@ function updateActionPanel() {
 btnOpenForm.addEventListener("click", () => openForm());
 btnCloseModal.addEventListener("click", closeForm);
 btnCancel.addEventListener("click", closeForm);
+
+searchInput.addEventListener("input", () => {
+  renderTable(searchInput.value);
+});
 
 modal.addEventListener("click", (e) => {
   if (e.target === modal) closeForm();

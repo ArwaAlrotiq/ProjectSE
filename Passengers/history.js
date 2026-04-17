@@ -1,5 +1,6 @@
 import { checkAuth } from '../Login/auth.js';
 checkAuth();
+window.clearBookingHistory = clearBookingHistory;
 function getBookings() {
   return JSON.parse(localStorage.getItem("bookings") || "[]");
 }

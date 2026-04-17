@@ -1,53 +1,540 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Role based & Train System Login</title>
-    <link rel="stylesheet" href="login.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Role Based & Train System Login</title>
+    <link rel="stylesheet" href="login.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary: #0f2340;
+            --primary-mid: #1a3a5c;
+            --accent: #3a8ef6;
+            --accent-dark: #1f6de0;
+            --gold: #e8a020;
+            --bg: #edf1f7;
+            --white: #ffffff;
+            --text: #1a2535;
+            --text-muted: #5f6d82;
+            --border: #d8e0ea;
+            --radius: 16px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(150deg, #e8edf5 0%, #dce5f0 100%);
+            min-height: 100vh;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header ── */
+        header {
+            width: 100%;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, var(--primary) 0%, #162d4a 100%);
+            color: white;
+            padding: 15px 40px;
+            height: 68px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: rgba(232, 160, 32, 0.18);
+            border: 1.5px solid rgba(232, 160, 32, 0.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--gold);
+        }
+
+        .brand-text strong {
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .brand-text span {
+            font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      display: block;
+        }
+
+
+        /* ── Main wrapper ── */
+        .page-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 24px;
+        }
+
+        /* ── Role Gateway ── */
+        #role-gateway {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 60px 50px 50px;
+            width: 100%;
+            max-width: 720px;
+            box-shadow: 0 12px 50px rgba(15, 35, 64, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.5s ease;
+        }
+
+        #role-gateway::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-mid), var(--accent), var(--gold));
+            border-radius: 24px 24px 0 0;
+        }
+
+        .gateway-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-mid));
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--gold);
+            margin-bottom: 24px;
+            box-shadow: 0 8px 28px rgba(15, 35, 64, 0.25);
+        }
+
+        #role-gateway h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .gateway-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+        }
+
+        /* ── Role Cards ── */
+        .roles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 36px;
+        }
+
+        .role-card {
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px 18px 22px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .role-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.25s ease;
+        }
+
+        .role-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(15, 35, 64, 0.11);
+            border-color: rgba(58, 142, 246, 0.35);
+        }
+
+        .role-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .role-card.selected {
+            border-color: var(--accent);
+            background: #f0f6ff;
+            box-shadow: 0 0 0 4px rgba(58, 142, 246, 0.12);
+        }
+
+        .role-card.selected::after {
+            transform: scaleX(1);
+        }
+
+        .role-card .rc-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 14px;
+        }
+
+        .rc-admin {
+            background: #e2eaf5;
+            color: var(--primary-mid);
+        }
+
+        .rc-manager {
+            background: #f0ebfc;
+            color: #7d3c98;
+        }
+
+        .rc-agent {
+            background: #e4f5f5;
+            color: #0e8a8a;
+        }
+
+        .role-card h3 {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .check-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 22px;
+            height: 22px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+        }
+
+        .role-card.selected .check-badge {
+            display: flex;
+        }
+
+        /* ── Buttons ── */
+        .next-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            padding: 14px 52px;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 22px rgba(58, 142, 246, 0.32);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(58, 142, 246, 0.42);
+        }
+
+        .next-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ── Login Form ── */
+        #login-form {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 60px 50px 50px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 12px 50px rgba(15, 35, 64, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.5s ease;
+        }
+
+        #login-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-mid), var(--accent), var(--gold));
+        }
+
+        .form-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-mid));
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(15, 35, 64, 0.25);
+        }
+
+        #login-form h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        #role-display {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            background: #eef5ff;
+            border: 1px solid #c5dcf8;
+            border-radius: 20px;
+            padding: 5px 16px;
+            display: inline-block;
+            margin-bottom: 28px;
+        }
+
+        /* Error message */
+        .error {
+            background: #fde8e8;
+            border: 1px solid #f5b7b1;
+            color: #c0392b;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Form fields */
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text);
+            background: #f9fafc;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(58, 142, 246, 0.15);
+            background: var(--white);
+        }
+
+        /* Form buttons */
+        .form-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        #login-form button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        #login-form button:first-of-type {
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: white;
+            box-shadow: 0 5px 18px rgba(58, 142, 246, 0.3);
+        }
+
+        #login-form button:first-of-type:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(58, 142, 246, 0.4);
+        }
+
+        #login-form button:last-of-type {
+            background: #f0f2f5;
+            color: var(--text-muted);
+            border: 1.5px solid var(--border);
+        }
+
+        #login-form button:last-of-type:hover {
+            background: #e4e8ee;
+        }
+
+        /* Animation */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <div class="container" id="role-gateway">
-        <h1>Select Your Role</h1>
+    <!-- Header -->
+    <header>
+        <div class="header-brand">
+            <div class="brand-icon"><i class="fas fa-train"></i></div>
+            <div class="brand-text">
+                <strong>Smart Railway Management System</strong>
+                <span>Central Operations Portal</span>
+            </div>
+        </div>
+    </header>
 
-        <div class="roles">
-            <div class="role-card" onclick="selectRole(this, 'administrator')">
-                <h3>Railway Administrator</h3>
+    <div class="page-wrapper">
+
+        <!-- ── Step 1: Role Selection ── -->
+        <div class="container" id="role-gateway">
+            <div class="gateway-icon"><i class="fas fa-users-cog"></i></div>
+            <h1>Select Your Role</h1>
+            <p class="gateway-subtitle">Choose your role to proceed to the login screen.</p>
+
+            <div class="roles">
+
+                <div class="role-card" onclick="selectRole(this, 'administrator')">
+                    <span class="check-badge"><i class="fas fa-check"></i></span>
+                    <div class="rc-icon rc-admin"><i class="fas fa-user-shield"></i></div>
+                    <h3>Railway Administrator</h3>
+                </div>
+
+                <div class="role-card" onclick="selectRole(this, 'manager')">
+                    <span class="check-badge"><i class="fas fa-check"></i></span>
+                    <div class="rc-icon rc-manager"><i class="fas fa-user-tie"></i></div>
+                    <h3>Manager</h3>
+                </div>
+
+                <div class="role-card" onclick="selectRole(this, 'reservation_agent')">
+                    <span class="check-badge"><i class="fas fa-check"></i></span>
+                    <div class="rc-icon rc-agent"><i class="fas fa-headset"></i></div>
+                    <h3>Reservation Agent</h3>
+                </div>
+
             </div>
 
-            <div class="role-card" onclick="selectRole(this, 'manager')">
-                <h3>Manager</h3>
+            <button class="next-btn" onclick="nextButton()">
+                <i class="fas fa-arrow-right"></i> Next
+            </button>
+        </div>
+
+        <!-- ── Step 2: Login Form ── -->
+        <div class="login-container" id="login-form" style="display:none;">
+            <div class="form-icon"><i class="fas fa-lock"></i></div>
+            <h2>Train Management System</h2>
+            <p id="role-display"></p>
+
+            <div id="error-msg" class="error hidden">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="error-text">Invalid username or password.</span>
             </div>
 
-            <div class="role-card" onclick="selectRole(this, 'reservation_agent')">
-                <h3>Reservation Agent</h3>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Enter your username" />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter your password" />
+            </div>
+
+            <div class="form-buttons">
+                <button onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button onclick="backButtn()">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
             </div>
         </div>
 
-        <button class="next-btn" onclick="nextButton()">Next</button>
-    </div>
-
-    <div class="login-container" id="login-form" style="display:none;">
-        <h2>Train Management System</h2>
-
-        <p id="role-display"></p>
-
-        <div id="error-msg" class="error hidden"></div>
-
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" id="username">
-        </div>
-
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="password">
-        </div>
-        
-        <button onclick="handleLogin()">Login</button>
-        <button onclick="backButtn()">Back</button>
-    </div>
+    </div><!-- /page-wrapper -->
 
     <script src="role-gateway.js"></script>
     <script src="encryption.js"></script>
@@ -55,4 +542,5 @@
     <script src="login.js"></script>
 
 </body>
+
 </html>

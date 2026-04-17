@@ -119,6 +119,7 @@ form.addEventListener('submit', function (e) {
   };
 
   createSchedule(newSchedule);
+  renderTable();
   form.reset();
 });
 

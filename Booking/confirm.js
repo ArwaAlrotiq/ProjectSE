@@ -36,9 +36,16 @@ function loadConfirmation() {
     booking.id || '—';
 
   const statusEl = document.getElementById('status');
-  statusEl.textContent = 'Confirmed';
-  statusEl.classList.remove('status-cancelled');
-  statusEl.classList.add('status-confirmed');
+  statusEl.textContent = booking.status;
+
+  statusEl.classList.remove('status-confirmed', 'status-cancelled');
+
+  if (booking.status === "Cancelled") {
+    statusEl.classList.add('status-cancelled');
+  } else {
+    statusEl.classList.add('status-confirmed');
+  }
+
 }
 
 function printConfirmation() {

@@ -27,11 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (result.success) {
 
+      if (result.booking.seat === 0 || result.booking.status === "Cancelled") {
+        window.location.href = "../Passengers/passenger-bookings.html"; 
+        return;
+      }
+
       localStorage.setItem("latestBooking", JSON.stringify(result.booking));
-
       window.location.href = "confirm.html";
-
-    } else {
+    }
+    else {
       messageArea.innerHTML = `<p class="error">${result.message}</p>`;
     }
 
