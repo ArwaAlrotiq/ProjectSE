@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 /* ============================================================
    CALCULATE UTILIZATION (REAL DATA)
 ============================================================ */

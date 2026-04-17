@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 /* ================================
    Dashboard Initialization
 ================================ */
@@ -21,11 +23,7 @@ function updateSummaryCards(bookings, schedules) {
     bookings.forEach(b => {
         if (b.status === "Confirmed") {
             confirmedBookings++;
-
-            const schedule = schedules.find(s => s.id == b.trainId);
-            if (schedule) {
-                totalRevenue += schedule.ticketPrice * b.seat;
-            }
+            totalRevenue += Number(b.totalPrice || 0);
         }
     });
 
@@ -192,4 +190,4 @@ function renderOccupancyChart() {
 /* ================================
    Initialize Dashboard
 ================================ */
-document.addEventListener("DOMContentLoaded", initDashboard);
+window.initDashboard = initDashboard;

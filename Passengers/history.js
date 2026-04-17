@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 function getBookings() {
   return JSON.parse(localStorage.getItem("bookings") || "[]");
 }

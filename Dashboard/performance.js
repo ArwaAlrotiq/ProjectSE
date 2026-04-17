@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 let responseTimes = [];
 let performanceChart;
 

@@ -15,8 +15,6 @@
         <p class="subtitle">Increase seats for an existing confirmed booking</p>
 
         <div class="form-group">
-
-            <!-- Hidden booking ID -->
             <input type="hidden" id="booking-id">
 
             <label for="seat-count-rebook">Number of Additional Seats:</label>
@@ -25,44 +23,10 @@
             <button id="rebook-btn">Add Seats Now</button>
 
             <div id="message-area"></div>
-
         </div>
     </div>
 
-    <script type="module">
-        import { rebookExistingTicket } from './booking.js';
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const directId = localStorage.getItem("directBookingId");
-            if (directId) {
-                document.getElementById("booking-id").value = directId;
-            }
-        });
-
-        document.getElementById('rebook-btn').addEventListener('click', () => {
-            const bookingId = document.getElementById('booking-id').value;
-            const count = parseInt(document.getElementById('seat-count-rebook').value);
-            const messageArea = document.getElementById('message-area');
-
-            if (!bookingId || isNaN(count) || count <= 0) {
-                messageArea.innerHTML = `<p class="error">Please enter a valid seat count.</p>`;
-                return;
-            }
-
-            const result = rebookExistingTicket(bookingId, count);
-
-            if (result.success) {
-
-                localStorage.setItem("latestBooking", JSON.stringify(result.booking));
-
-                window.location.href = "confirm.html";
-
-            } else {
-                messageArea.innerHTML = `<p class="error">${result.message}</p>`;
-            }
-        });
-    </script>
-
+    <script type="module" src="booking.js"></script>
 </body>
 
 </html>

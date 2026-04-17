@@ -1,4 +1,6 @@
+import { checkAuth } from '../Login/auth.js';
 import { cancelBooking } from './booking.js';
+checkAuth();
 
 document.addEventListener("DOMContentLoaded", () => {
 

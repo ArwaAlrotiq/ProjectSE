@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 // Load historical schedules only
 document.addEventListener("DOMContentLoaded", displayHistoricalSchedules);
 

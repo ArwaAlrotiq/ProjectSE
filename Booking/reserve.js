@@ -1,4 +1,6 @@
 import { getScheduleById, bookTickets } from './booking.js';
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 
 const currentUserName = localStorage.getItem("selectedPassengerName") || "Passenger";
 const currentPassengerId = localStorage.getItem("selectedPassengerId") || null;

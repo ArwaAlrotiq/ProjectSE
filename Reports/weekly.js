@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 function generateWeeklyReport() {
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
@@ -94,3 +96,4 @@ function renderWeeklyChart(labels, data) {
         }
     });
 }
+window.addEventListener('load', generateWeeklyReport);

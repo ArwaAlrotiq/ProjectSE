@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 // ================================================
 // STORAGE HELPERS
 // ================================================
@@ -208,4 +210,46 @@ export function bookWithRollback(scheduleId, numberOfTickets = 1) {
 
     return { success: false, message: "Booking failed: " + err.message };
   }
+}
+// ===============================
+// SUPPORT REBOOK PAGE
+// ===============================
+if (document.getElementById("rebook-btn")) {
+
+    const bookingIdInput = document.getElementById("booking-id");
+    const seatCountInput = document.getElementById("seat-count-rebook");
+    const messageArea = document.getElementById("message-area");
+
+    const latestBooking = JSON.parse(localStorage.getItem("latestBooking"));
+    if (latestBooking) {
+        bookingIdInput.value = latestBooking.id;
+    }
+
+    document.getElementById("rebook-btn").addEventListener("click", () => {
+        const bookingId = bookingIdInput.value;
+        const additionalSeats = Number(seatCountInput.value);
+
+        if (!bookingId) {
+            messageArea.innerHTML = `<p style="color:red;">Booking ID missing.</p>`;
+            return;
+        }
+
+        if (additionalSeats < 1) {
+            messageArea.innerHTML = `<p style="color:red;">Enter at least 1 seat.</p>`;
+            return;
+        }
+
+        const result = rebookExistingTicket(bookingId, additionalSeats);
+
+        if (result.success) {
+            messageArea.innerHTML = `<p style="color:green;">${result.message}</p>`;
+            localStorage.setItem("latestBooking", JSON.stringify(result.booking));
+            setTimeout(() => {
+    window.location.href = "../Booking/confirm.html";
+}, 800);
+
+        } else {
+            messageArea.innerHTML = `<p style="color:red;">${result.message}</p>`;
+        }
+    });
 }

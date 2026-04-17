@@ -1,6 +1,15 @@
-function generateComprehensiveReport() {
-    const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
-    const schedules = JSON.parse(localStorage.getItem("trainSchedules")) || [];
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
+export function generateComprehensiveReport() {
+  console.log("Generating report...");
+
+    const bookings = Array.isArray(JSON.parse(localStorage.getItem("bookings")))
+        ? JSON.parse(localStorage.getItem("bookings"))
+        : [];
+
+    const schedules = Array.isArray(JSON.parse(localStorage.getItem("trainSchedules")))
+        ? JSON.parse(localStorage.getItem("trainSchedules"))
+        : [];
 
     let totalRevenue = 0;
     let totalSeats = 0;
@@ -9,12 +18,17 @@ function generateComprehensiveReport() {
     const dailyStats = {};
 
     const distinctTrainsInBookings = [
-        ...new Set(bookings.map(b => b.trainName || "Unknown Train"))
+        ...new Set(
+            bookings
+                .filter(b => b && typeof b === "object")
+                .map(b => b.trainName || "Unknown Train")
+        )
     ];
 
     const displayTotalTrains = Math.max(schedules.length, distinctTrainsInBookings.length);
 
     bookings.forEach(booking => {
+        if (!booking || typeof booking !== "object") return;
         if (booking.status === "Confirmed") {
             confirmedBookings++;
 
@@ -37,10 +51,7 @@ function generateComprehensiveReport() {
                 ? new Date(booking.bookingTime).toLocaleDateString()
                 : new Date().toLocaleDateString();
 
-            if (!dailyStats[date]) {
-                dailyStats[date] = 0;
-            }
-            dailyStats[date] += 1;
+            dailyStats[date] = (dailyStats[date] || 0) + 1;
         }
     });
 
@@ -92,3 +103,4 @@ function renderChart(labels, data) {
         }
     });
 }
+window.addEventListener('load', generateComprehensiveReport);

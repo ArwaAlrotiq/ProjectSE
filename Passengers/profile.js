@@ -1,4 +1,6 @@
 import { showUpdateConfirmation, showDeleteConfirmation } from './validation.js';
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 
 const STORAGE_KEY = 'passengerProfiles';
 

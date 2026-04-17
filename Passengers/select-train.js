@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 function loadSchedules() {
     return JSON.parse(localStorage.getItem("trainSchedules") || "[]");
 }

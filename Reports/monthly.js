@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 function generateMonthlyReport() {
     const bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
@@ -80,3 +82,4 @@ function renderMonthlyChart(labels, data) {
         }
     });
 }
+window.addEventListener('load', generateMonthlyReport);

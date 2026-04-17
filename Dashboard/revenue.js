@@ -1,6 +1,5 @@
 import { checkAuth } from '../Login/auth.js';
 checkAuth();
-
 // ================================
 // Calculate total revenue
 // ================================
@@ -15,7 +14,7 @@ function calculateTotalRevenue() {
       const schedule = schedules.find(s => s.id == booking.trainId);
 
       if (schedule) {
-        total += Number(schedule.ticketPrice) * Number(booking.seat);
+total += Number(booking.totalPrice || 0);
       }
     }
   });

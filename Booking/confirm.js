@@ -1,3 +1,9 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
+window.loadConfirmation = loadConfirmation;
+window.printConfirmation = printConfirmation;
+window.downloadConfirmationPDF = downloadConfirmationPDF;
+
 function loadConfirmation() {
   const booking = JSON.parse(localStorage.getItem('latestBooking'));
 
@@ -6,13 +12,13 @@ function loadConfirmation() {
       '<p style="text-align:center;color:red;">No booking found.</p>';
     return;
   }
+
   const storedPassengerName = localStorage.getItem('selectedPassengerName');
 
   document.getElementById('passenger-name').textContent =
     booking.passengerName && booking.passengerName !== "Passenger"
       ? booking.passengerName
       : storedPassengerName || '—';
-
 
   document.getElementById('train-name').textContent =
     booking.trainName || '—';
@@ -72,4 +78,4 @@ async function downloadConfirmationPDF() {
   doc.save(`booking_${booking.id}.pdf`);
 }
 
-loadConfirmation();
+window.addEventListener('load', loadConfirmation);

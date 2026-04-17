@@ -1,3 +1,5 @@
+import { checkAuth } from '../Login/auth.js';
+checkAuth();
 function calculateRevenuePerTrain() {
   const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
   const confirmed = bookings.filter(b => b.status === 'Confirmed');
@@ -57,3 +59,4 @@ function renderRevenueChart() {
 }
 
 renderRevenueChart();
+window.addEventListener('load', generateWeeklyReport);
