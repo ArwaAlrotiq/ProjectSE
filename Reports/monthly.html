@@ -14,6 +14,39 @@
         .card h3 { font-size: 14px; color: #64748b; margin-bottom: 10px; text-transform: uppercase; }
         .card p { font-size: 22px; font-weight: bold; color: #1e293b; margin: 0; }
         .chart-container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); height: 450px; }
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+    margin: 0;
+  }
+
+  .summary-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .chart-container {
+    width: 100%;
+    padding: 15px;
+    margin: 0 10px;
+    height: auto;
+  }
+
+  button,
+  input,
+  select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
     </style>
 </head>
 <body onload="generateMonthlyReport()">

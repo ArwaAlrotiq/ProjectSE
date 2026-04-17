@@ -105,3 +105,31 @@ button {
 .back-btn:hover {
     background: #dcdcdc;
 }
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+        display: block;
+        margin: 0;
+    }
+
+    .profile-container {
+        padding: 20px;
+        margin: 0 10px;
+        width: 100%;
+    }
+
+    .grid-container {
+        grid-template-columns: 1fr; 
+        gap: 12px;
+    }
+
+    .full-width {
+        grid-column: span 1;
+    }
+
+    button, input, select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

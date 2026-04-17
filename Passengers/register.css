@@ -265,9 +265,133 @@ nav a.active {
   margin-bottom: 28px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+    margin: 0;
+  }
+
+  /* Header */
+  .site-header {
+    padding: 0 16px;
+  }
+
+  .header-inner {
+    flex-direction: column;
+    height: auto;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Main content */
+  .main-content {
+    padding: 20px 10px;
+  }
+
+  /* Page header */
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .stat-card {
+    width: 100%;
+  }
+
+  /* Modal */
+  .modal {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+
+  .modal-header {
+    padding: 16px;
+  }
+
+  #passenger-form {
+    padding: 16px;
+  }
+
+  /* Form grid */
   .form-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Inputs & buttons */
+  button,
+  input,
+  select {
+    width: 100%;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Table container */
+  .table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+  }
+
+  table {
+    min-width: 650px;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px;
+  }
+
+  /* Search bar */
+  .search-wrapper {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #search-input {
+    width: 100%;
+  }
+
+  /* Action buttons under table */
+  .action-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .small-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Toast */
+  .toast {
+    right: 10px;
+    left: 10px;
+    bottom: 20px;
+    max-width: 100%;
   }
 }
 

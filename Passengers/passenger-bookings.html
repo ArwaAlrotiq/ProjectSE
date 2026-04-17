@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Passenger Bookings</title>
 
   <style>
@@ -80,6 +81,30 @@
 
     .btn-cancel:hover { background-color: #c0392b; }
     .btn-extra:hover { background-color: #1e8449; }
+    @media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+        margin: 0;
+    }
+
+    #historyTable {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    #historyTable th,
+    #historyTable td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button, input, select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
 
   </style>
 </head>

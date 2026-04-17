@@ -125,12 +125,26 @@ button:nth-child(2):hover {
 /* ================================
    Responsive
 ================================ */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+    display: block; 
+    align-items: flex-start; 
+  }
+
   .confirmation-container {
-    width: 90%;
+    width: 100%;
     padding: 20px;
+    margin: 0 10px;
+  }
+
+  button, input, select {
+    width: 100%;
+    margin-bottom: 10px;
   }
 }
+
 .back-btn {
     background: #ecf0f1;
     color: #2c3e50;

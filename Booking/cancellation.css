@@ -7,12 +7,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; 
+    height: auto;      
     margin: 0;
 }
 
 /* ================================
-   Container
+   Containera
 ================================ */
 .confirmation-container {
     background: white;
@@ -80,24 +81,7 @@ button:hover {
     background-color: #c0392b;
 }
 
-/* ================================
-   Responsive
-================================ */
-@media (max-width: 480px) {
-    .confirmation-container {
-        width: 90%;
-        padding: 20px;
-    }
-
-    input {
-        font-size: 14px;
-    }
-
-    button {
-        font-size: 15px;
-        padding: 12px;
-    }
-}
+/* Back button */
 .back-btn {
     background: #ecf0f1;
     color: #2c3e50;
@@ -113,4 +97,26 @@ button:hover {
 
 .back-btn:hover {
     background: #dcdcdc;
+}
+
+/* ================================
+   Responsive
+================================ */
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+        display: block;
+    }
+
+    .confirmation-container {
+        width: 100%;
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    button, input, select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }

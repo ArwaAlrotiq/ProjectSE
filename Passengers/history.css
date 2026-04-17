@@ -47,3 +47,27 @@ h1 {
 .clear-btn:hover {
   background: #e74c3c;
 }
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+        margin: 0;
+    }
+
+    #historyTable {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    #historyTable th,
+    #historyTable td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button, input, select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

@@ -104,3 +104,40 @@ tbody tr:hover {
 .clear-btn:hover {
   background: #e74c3c;
 }
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+    margin: 0;
+  }
+
+  .container {
+    width: 100%;
+    padding: 15px;
+    margin: 0;
+  }
+
+  .search-bar input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 12px;
+  }
+
+  button,
+  input,
+  select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

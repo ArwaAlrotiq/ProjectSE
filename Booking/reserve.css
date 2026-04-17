@@ -63,3 +63,24 @@ button:hover {
 .back-btn:hover {
     background: #dcdcdc;
 }
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+        display: block;
+        align-items: flex-start; 
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .booking-container {
+        width: 100%;
+        padding: 20px;
+        margin: 0 10px;
+    }
+
+    button, input, select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

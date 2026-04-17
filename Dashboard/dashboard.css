@@ -145,3 +145,55 @@ canvas {
     max-width: 100%;
     margin-top: 20px;
 }
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+    }
+
+    #occupancy-container,
+    #occupancyChart {
+        width: 100%;
+        margin: 20px 10px;
+    }
+
+    #utilization-table,
+    #occupancy-container {
+        overflow-x: auto;
+        display: block;
+    }
+
+    #utilization-table table,
+    #occupancy-container table {
+        min-width: 600px;
+        white-space: nowrap;
+        display: block;
+    }
+
+    #utilization-table th,
+    #utilization-table td,
+    #occupancy-container th,
+    #occupancy-container td {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .summary-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin: 10px;
+    }
+
+    .charts-grid-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
+        margin: 0 10px;
+    }
+
+    button, input, select {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
