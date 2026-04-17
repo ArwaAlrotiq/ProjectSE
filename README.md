@@ -2,8 +2,8 @@ _**Train Reservation & Management System**_
 
 ProjectSE – Software Engineering Project
 
-A complete web-based system for managing train schedules, passenger profiles, ticket bookings, reports, and user authentication.
-Built using HTML, CSS, JavaScript, and LocalStorage.
+A complete web-based system for managing train schedules, passenger profiles, ticket bookings, reports, and user authentication.  
+Built using **HTML, CSS, JavaScript, and LocalStorage** — fully client‑side with no backend required.
 
 
 <br>
@@ -13,19 +13,20 @@ Built using HTML, CSS, JavaScript, and LocalStorage.
 
       This project provides a full reservation workflow, including:
 
-Schedule management
+- Train schedule management
+  
+- Passenger registration & profile editing
+  
+- Ticket booking with seat availability
+   
+- Dashboard analytics & utilization charts
+  
+- Revenue and booking reports
 
-Passenger registration
+- User login with role‑based access control
+  
 
-Ticket booking
-
-Revenue reports
-
-User login & role-based access
-
-Dashboard analytics
-
-    The system is fully client-side and requires no backend server.
+      The system is fully client-side and requires no backend server.
 
 <br>
 <br>
@@ -48,6 +49,8 @@ ProjectSE/
 
 │── index.html
 
+│── README.md
+
 │── .gitignore
 
 Each module contains its own HTML, CSS, and JavaScript files.
@@ -63,8 +66,8 @@ The system includes predefined users:
 
       | agent | agent123 | reservation_agent 
 
-      | manager | manager123 | manager 
-
+      | manager | manager123 | manager
+_**Each role has access to different modules and actions.**_
 
 <br>
 
@@ -73,15 +76,15 @@ The system includes predefined users:
 
 Features:
 
-Seat availability check
-
-Ticket booking
+Real-time seat availability
+   
+Ticket booking with validation
 
 Automatic seat decrement
+   
+Booking history stored in LocalStorage
 
-Booking history
-
-Transactional rollback on failure
+Rollback mechanism on booking failure  
 
 <br>
 
@@ -109,15 +112,15 @@ Duplicate passport detection
   
 Features:
 
-Add schedule
+Add train schedule
 
 Edit schedule
-
+  
 Delete schedule
-
+    
 Display schedules in a table
 
-Save schedules in LocalStorage
+Save schedules in LocalStorage 
 
 <br>
 
@@ -127,10 +130,14 @@ Save schedules in LocalStorage
 Features:
 
 Revenue calculation per train
-
+  
 Booking summaries
 
-Data analysis
+Utilization charts (doughnut + bar charts)
+  
+Occupancy analysis
+    
+Summary cards (total trains, bookings, revenue)  
 
 <br>
 <br>
@@ -146,17 +153,21 @@ _**How to Run the Project**_
 
 Open the live demo:
 
-    https://arwaalrotiq.github.io/ProjectSE/Login/login.html
+    https://arwaalrotiq.github.io/ProjectSE
 
 <br>
 
 *Option 2: Run Locally*
 
+<br>
+
 1-Download the project (Download ZIP)
 
-2-Open any HTML file in your browser
-
-3-The system runs immediately — no setup required
+2. Extract the folder
+   
+3. Open any HTML file in your browser
+   
+4. The system runs immediately — no setup required
 
 
 
@@ -166,7 +177,7 @@ Open the live demo:
 
 
 
-_**Team Members**_
+_**Team Members:**_
 
 Arwa Fahad Alrotiq 
 
@@ -210,4 +221,4 @@ GitHub Pages
 
 * Contact
 
-For questions or feedback, please open an Issue on the repository.
+For questions or feedback, please open an **Issue** on the repository.
