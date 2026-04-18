@@ -44,8 +44,7 @@ window.cancelDirect = function (bookingId) {
 };
 
 window.extraDirect = function (bookingId) {
-  localStorage.setItem("directBookingId", bookingId);
-  window.location.href = "../Booking/booking.html";
+  window.location.href = "../Booking/booking.html?bookingId=" + bookingId;
 };
 
 renderBookings();

@@ -32,8 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      localStorage.setItem("latestBooking", JSON.stringify(result.booking));
-      window.location.href = "confirm.html";
+      window.location.href = "confirm.html?bookingId=" + result.booking.id;
     }
     else {
       messageArea.innerHTML = `<p class="error">${result.message}</p>`;

@@ -74,7 +74,7 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
     ? localStorage.getItem("selectedPassengerName")
     : passengerName;
 
-  let schedules =loadSchedules();
+  let schedules = loadSchedules();
   let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
   const schedule = schedules.find(s => String(s.id).trim() === String(trainId).trim());
@@ -105,8 +105,6 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
 
   saveSchedules(schedules);
   localStorage.setItem("bookings", JSON.stringify(bookings));
-  localStorage.setItem("latestBooking", JSON.stringify(booking));
-  window.dispatchEvent(new Event('storage'));
   return { success: true, booking };
 }
 
@@ -164,12 +162,13 @@ export function rebookExistingTicket(bookingId, additionalTickets) {
 
   const booking = bookings[bookingIndex];
   const schedule = getScheduleById(booking.trainId);
-if (booking.seat === 0 || booking.status === "Cancelled") {
-  return {
-    success: false,
-    message: "This booking is fully cancelled. Please create a new booking."
-  };
-}
+
+  if (booking.seat === 0 || booking.status === "Cancelled") {
+    return {
+      success: false,
+      message: "This booking is fully cancelled. Please create a new booking."
+    };
+  }
 
   if (!schedule) {
     return { success: false, message: "Schedule not found." };
@@ -188,10 +187,11 @@ if (booking.seat === 0 || booking.status === "Cancelled") {
 
   bookings[bookingIndex] = booking;
   localStorage.setItem("bookings", JSON.stringify(bookings));
-  localStorage.setItem("latestBooking", JSON.stringify(booking));
+
   return {
     success: true,
     message: `Added ${additionalTickets} seats. Total now: ${booking.seat}`,
+    bookingId: booking.id,
     booking
   };
 }
@@ -227,9 +227,11 @@ if (document.getElementById("rebook-btn")) {
   const seatCountInput = document.getElementById("seat-count-rebook");
   const messageArea = document.getElementById("message-area");
 
-  const latestBooking = JSON.parse(localStorage.getItem("latestBooking"));
-  if (latestBooking) {
-    bookingIdInput.value = latestBooking.id;
+  const params = new URLSearchParams(window.location.search);
+  const bookingIdFromUrl = params.get("bookingId");
+
+  if (bookingIdFromUrl) {
+    bookingIdInput.value = bookingIdFromUrl;
   }
 
   document.getElementById("rebook-btn").addEventListener("click", () => {
@@ -250,11 +252,7 @@ if (document.getElementById("rebook-btn")) {
 
     if (result.success) {
       messageArea.innerHTML = `<p style="color:green;">${result.message}</p>`;
-      localStorage.setItem("latestBooking", JSON.stringify(result.booking));
-      setTimeout(() => {
-        window.location.href = "../Booking/confirm.html";
-      }, 800);
-
+      window.location.href = "../Booking/confirm.html?bookingId=" + result.booking.id;
     } else {
       messageArea.innerHTML = `<p style="color:red;">${result.message}</p>`;
     }

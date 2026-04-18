@@ -5,7 +5,11 @@ window.printConfirmation = printConfirmation;
 window.downloadConfirmationPDF = downloadConfirmationPDF;
 
 function loadConfirmation() {
-  const booking = JSON.parse(localStorage.getItem('latestBooking'));
+  const params = new URLSearchParams(window.location.search);
+  const bookingId = params.get("bookingId");
+
+  const allBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+  const booking = allBookings.find(b => b.id == bookingId);
 
   if (!booking) {
     document.getElementById('confirmation-box').innerHTML =
@@ -13,47 +17,30 @@ function loadConfirmation() {
     return;
   }
 
-  const storedPassengerName = localStorage.getItem('selectedPassengerName');
-
-  document.getElementById('passenger-name').textContent =
-    booking.passengerName && booking.passengerName !== "Passenger"
-      ? booking.passengerName
-      : storedPassengerName || '—';
-
-  document.getElementById('train-name').textContent =
-    booking.trainName || '—';
-
-  document.getElementById('booking-date').textContent =
-    booking.date || '—';
-
-  document.getElementById('seat-count').textContent =
-    booking.seat ?? '—';
-
+  document.getElementById('passenger-name').textContent = booking.passengerName || '—';
+  document.getElementById('train-name').textContent = booking.trainName || '—';
+  document.getElementById('booking-date').textContent = booking.date || '—';
+  document.getElementById('seat-count').textContent = booking.seat ?? '—';
   document.getElementById('total-price').textContent =
     booking.totalPrice != null ? booking.totalPrice + ' SAR' : '—';
-
-  document.getElementById('booking-id').textContent =
-    booking.id || '—';
+  document.getElementById('booking-id').textContent = booking.id || '—';
 
   const statusEl = document.getElementById('status');
   statusEl.textContent = booking.status;
 
   statusEl.classList.remove('status-confirmed', 'status-cancelled');
-
-  if (booking.status === "Cancelled") {
-    statusEl.classList.add('status-cancelled');
-  } else {
-    statusEl.classList.add('status-confirmed');
-  }
-
+  statusEl.classList.add(booking.status === "Cancelled" ? 'status-cancelled' : 'status-confirmed');
 }
-
 function printConfirmation() {
   window.print();
 }
 
 async function downloadConfirmationPDF() {
-  const booking = JSON.parse(localStorage.getItem('latestBooking'));
+  const params = new URLSearchParams(window.location.search);
+  const bookingId = params.get("bookingId");
+
+  const allBookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+  const booking = allBookings.find(b => b.id == bookingId);
   if (!booking) return;
 
   const { jsPDF } = window.jspdf;
