@@ -9,6 +9,7 @@ function loadSchedules() {
 
 function saveSchedules(schedules) {
   localStorage.setItem("trainSchedules", JSON.stringify(schedules));
+  window.dispatchEvent(new Event('storage'));
 }
 
 export function getScheduleById(id) {
@@ -73,10 +74,10 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
     ? localStorage.getItem("selectedPassengerName")
     : passengerName;
 
-  let schedules = JSON.parse(localStorage.getItem("trainSchedules") || "[]");
+  let schedules =loadSchedules();
   let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
-  const schedule = schedules.find(s => s.id == trainId);
+  const schedule = schedules.find(s => String(s.id).trim() === String(trainId).trim());
   if (!schedule) {
     return { success: false, message: "Train schedule not found" };
   }
@@ -88,7 +89,7 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
   schedule.availableSeats -= tickets;
 
   const booking = {
-    id: Date.now(),
+    id: Date.now().toString(),
     passengerId: passengerId,
     passengerName: passengerName,
     trainId: trainId,
@@ -102,10 +103,10 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
 
   bookings.push(booking);
 
-  localStorage.setItem("trainSchedules", JSON.stringify(schedules));
+  saveSchedules(schedules);
   localStorage.setItem("bookings", JSON.stringify(bookings));
   localStorage.setItem("latestBooking", JSON.stringify(booking));
-
+  window.dispatchEvent(new Event('storage'));
   return { success: true, booking };
 }
 
@@ -140,8 +141,8 @@ export function cancelBooking(bookingId, ticketsToCancel) {
   booking.status = booking.seat === 0 ? "Cancelled" : "Confirmed";
 
   bookings[bookingIndex] = booking;
+  saveSchedules(schedules);
   localStorage.setItem("bookings", JSON.stringify(bookings));
-  localStorage.setItem("trainSchedules", JSON.stringify(schedules));
 
   return {
     success: true,

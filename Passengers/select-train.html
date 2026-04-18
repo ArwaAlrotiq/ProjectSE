@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Select Train</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
 
   <style>
     body {
@@ -26,7 +31,8 @@
       overflow: hidden;
     }
 
-    th, td {
+    th,
+    td {
       padding: 12px;
       border-bottom: 1px solid #ddd;
       text-align: center;
@@ -59,29 +65,33 @@
       display: inline-block;
       background: #555;
     }
+
     @media (max-width: 600px) {
 
-  body {
-    padding: 10px;
-    margin: 0;
-  }
+      body {
+        padding: 10px;
+        margin: 0;
+      }
 
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-    font-size: 14px;
-  }
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        font-size: 14px;
+      }
 
-  th, td {
-    padding: 10px;
-  }
+      th,
+      td {
+        padding: 10px;
+      }
 
-  button, input, select {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
+      button,
+      input,
+      select {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
   </style>
 </head>
 
@@ -107,7 +117,8 @@
     <tbody id="train-table-body"></tbody>
   </table>
 
-<script src="select-train.js" type="module"></script>
+<script type="module" src="select-train.js"></script>
 
 </body>
+
 </html>

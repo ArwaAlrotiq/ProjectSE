@@ -105,7 +105,6 @@ function renderTable() {
     tableBody.appendChild(row);
   });
 }
-
 form.addEventListener('submit', function (e) {
   e.preventDefault();
 
@@ -184,5 +183,14 @@ function init() {
   moveFinishedTrainsToHistory();
   renderTable();
 }
+window.addEventListener("pageshow", (event) => {
+    renderTrains();
+});
 
+window.addEventListener('storage', (e) => {
+    if (e.key === 'trainSchedules') {
+        renderTrains();
+    }
+});
 init();
+document.addEventListener("DOMContentLoaded", renderTrains);

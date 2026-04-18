@@ -44,8 +44,7 @@ function renderSeats(schedule) {
 
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
-    const trainId = Number(params.get("id") || localStorage.getItem("selectedTrainId"));
-
+const trainId = params.get("id") || localStorage.getItem("selectedTrainId");
     if (trainId) {
         const inputField = document.getElementById('train-id-input');
         if (inputField) inputField.value = trainId;
@@ -65,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.getElementById("reserve-btn").addEventListener("click", () => {
-    const trainId = Number(document.getElementById('train-id-input').value.trim());
+    const trainId = document.getElementById('train-id-input').value.trim();
     const tickets = Number(document.getElementById("ticket-count").value);
 
     if (!trainId) {
@@ -82,15 +81,15 @@ document.getElementById("reserve-btn").addEventListener("click", () => {
     const result = bookTickets(trainId, tickets, currentUserName, currentPassengerId);
 
     if (result.success) {
-        localStorage.setItem("latestBooking", JSON.stringify(result.booking));
+        window.dispatchEvent(new Event('storage'));
+                localStorage.setItem("latestBooking", JSON.stringify(result.booking));
         window.location.href = "confirm.html";
     }
     else {
         alert(result.message);
     }
 });
-
 document.getElementById('train-id-input').addEventListener('input', (e) => {
     const trainId = e.target.value.trim();
-    updateDisplay(trainId);
+    updateDisplay(trainId); 
 });
