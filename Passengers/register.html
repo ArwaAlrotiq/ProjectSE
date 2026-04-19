@@ -15,7 +15,7 @@
     <!-- Page Header -->
     <div class="page-header">
       <div>
-                <a href="../index.html" class="home-btn">← Home</a>
+        <a href="../index.html" class="home-btn">← Home</a>
         <h1>Passenger Registration</h1>
         <p class="subtitle">Create and manage passenger profiles</p>
       </div>
@@ -204,6 +204,17 @@
   </main>
 
   <div class="toast" id="toast"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const selectedTrain = JSON.parse(localStorage.getItem("selectedTrain"));
+
+      if (selectedTrain) {
+        document.getElementById("trainName").textContent = selectedTrain.name;
+        document.getElementById("trainPrice").textContent = selectedTrain.price + " SAR";
+        document.getElementById("trainDestination").textContent = selectedTrain.destination;
+      }
+    });
+  </script>
 
   <script src="register.js" type="module"></script>
   <script src="profile.js" type="module"></script>

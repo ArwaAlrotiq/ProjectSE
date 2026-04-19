@@ -40,8 +40,15 @@ function renderTrains() {
 }
 
 window.selectTrain = function (trainId) {
-    const passengerId = localStorage.getItem("selectedPassengerId");
+    const schedules = loadSchedules();
+    const selectedTrain = schedules.find(t => String(t.id) === String(trainId));
 
+    if (!selectedTrain) {
+        alert("Train not found.");
+        return;
+    }
+
+    const passengerId = localStorage.getItem("selectedPassengerId");
     if (!passengerId) {
         alert("Please select a passenger first.");
         return;
@@ -51,15 +58,11 @@ window.selectTrain = function (trainId) {
         .find(p => String(p.id).trim() === String(passengerId).trim());
 
     if (passenger) {
-        localStorage.setItem(
-            "selectedPassengerName",
-            `${passenger.firstName} ${passenger.lastName}`
-        );
-    } else {
-        console.error("Passenger profile not found for ID:", passengerId);
+        localStorage.setItem("selectedPassengerName", `${passenger.firstName} ${passenger.lastName}`);
     }
 
-    localStorage.setItem("selectedTrainId", String(trainId));
+    localStorage.setItem("selectedTrain", JSON.stringify(selectedTrain));
+
     window.location.href = `../Booking/reserve.html?t=${Date.now()}`;
 };
 
