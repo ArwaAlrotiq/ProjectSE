@@ -43,22 +43,15 @@ function renderSeats(schedule) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    const trainId = localStorage.getItem("selectedTrainId");
+    const urlParams = new URLSearchParams(window.location.search);
+    const trainId = urlParams.get("t");
+
     if (trainId) {
+        localStorage.setItem("selectedTrainId", trainId); 
         const inputField = document.getElementById('train-id-input');
         if (inputField) inputField.value = trainId;
 
-        const schedule = getScheduleById(trainId);
-        const display = document.getElementById('available-seats-count');
-
-        if (schedule && display) {
-            display.textContent = schedule.availableSeats;
-            display.style.color = "#27ae60";
-            renderSeats(schedule);
-        } else if (display) {
-            display.textContent = "Not found";
-            display.style.color = "#e74c3c";
-        }
+        updateDisplay(trainId);
     }
 });
 
