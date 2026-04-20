@@ -63,7 +63,7 @@ window.selectTrain = function (trainId) {
 
     localStorage.setItem("selectedTrain", JSON.stringify(selectedTrain));
 
-    window.location.href = `../Booking/reserve.html?t=${Date.now()}`;
+    window.location.href = `../Booking/reserve.html?t=${trainId}`;
 };
 
 document.addEventListener("DOMContentLoaded", () => {
