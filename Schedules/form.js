@@ -183,3 +183,4 @@ function init() {
   moveFinishedTrainsToHistory();
   renderTable();
 }
+init();
