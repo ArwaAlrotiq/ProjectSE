@@ -88,5 +88,6 @@ document.getElementById("reserve-btn").addEventListener("click", () => {
 });
 document.getElementById('train-id-input').addEventListener('input', (e) => {
     const trainId = e.target.value.trim();
+    localStorage.setItem("selectedTrainId", trainId);
     updateDisplay(trainId);
 });
