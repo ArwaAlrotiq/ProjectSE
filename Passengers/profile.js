@@ -87,36 +87,29 @@ document.addEventListener('DOMContentLoaded', () => {
     /* -------------------------------
        UPDATE PROFILE
     -------------------------------- */
-    document.getElementById("btn-update").addEventListener("click", () => {
-      const passengers = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      const currentId = fields.id.value;
+   document.getElementById("btn-update").addEventListener("click", () => {
 
-      const index = passengers.findIndex((p) => p.id === currentId);
+    const passengers = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const index = passengers.findIndex(p => p.id === fields.id.value);
 
-      if (index === -1) return alert("Passenger not found!");
+    if (index === -1)
+        return alert("Passenger not found!");
 
-      const requiredFields = [
-        [fields.firstName, "First name"],
-        [fields.lastName, "Last name"],
-        [fields.nationality, "Nationality"],
-        [fields.email, "Email address"],
-        [fields.phone, "Phone number"],
-        [fields.passport, "Passport / ID"],
-      ];
+    const validations = [
+        [fields.firstName.value.trim().length >= 2, "First name must contain at least 2 characters"],
+        [fields.lastName.value.trim().length >= 2, "Last name must contain at least 2 characters"],
+        [fields.nationality.value.trim().length >= 2, "Please enter a valid nationality"],
+        [/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.value.trim()), "Please enter a valid email address"],
+        [/^[0-9]{10}$/.test(fields.phone.value.trim()), "Please enter a valid phone number"],
+        [fields.passport.value.trim().length >= 5, "Please enter a valid Passport / ID"],
+        [new Date(fields.dob.value) <= new Date(), "Date of birth cannot be in the future"]
+    ];
 
-      for (const [field, label] of requiredFields) {
-        if (!field.value.trim()) return alert(`${label} is required`);
-      }
+    for (const [isValid, message] of validations) {
+        if (!isValid) return alert(message);
+    }
 
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailPattern.test(fields.email.value.trim()))
-        return alert("Please enter a valid email address");
-
-      if (new Date(fields.dob.value) > new Date())
-        return alert("Date of birth cannot be in the future");
-
-      passengers[index] = {
+    passengers[index] = {
         ...passengers[index],
         firstName: fields.firstName.value.trim(),
         lastName: fields.lastName.value.trim(),
@@ -126,13 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
         email: fields.email.value.trim(),
         phone: fields.phone.value.trim(),
         passport: fields.passport.value.trim(),
-        emergencyContact: fields.emergency.value.trim(),
-      };
+        emergencyContact: fields.emergency.value.trim()
+    };
 
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(passengers));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(passengers));
 
-      showUpdateConfirmation();
-    });
+    showUpdateConfirmation();
+});
 
     /* -------------------------------
        DELETE PROFILE
