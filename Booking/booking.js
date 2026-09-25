@@ -69,57 +69,43 @@ function saveBookingToHistory(schedule, numberOfTickets, passengerName = "Passen
 // BOOK TICKETS (MAIN FUNCTION)
 // ================================================
 export function bookTickets(trainId, tickets, passengerName, passengerId) {
+  passengerName =
+    passengerName === "Passenger"
+      ? localStorage.getItem("selectedPassengerName")
+      : passengerName;
 
-  passengerName = passengerName === "Passenger"
-    ? localStorage.getItem("selectedPassengerName")
-    : passengerName;
-
-  let schedules = loadSchedules();
-  let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+  const schedules = loadSchedules();
+  const bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
   const schedule = schedules.find(
-    s => String(s.id).trim() === String(trainId).trim()
+    (s) => String(s.id).trim() === String(trainId).trim(),
   );
 
-  // Train validation
-  if (!schedule) {
-    return { success: false, message: "Train schedule not found" };
-  }
+  if (!schedule) return { success: false, message: "Train schedule not found" };
 
-  // Passenger validation
-  if (!passengerName || passengerName.trim() === "") {
+  if (!passengerName?.trim())
     return { success: false, message: "Passenger name is required" };
-  }
 
-  if (!passengerId || String(passengerId).trim() === "") {
+  if (!String(passengerId || "").trim())
     return { success: false, message: "Passenger ID is required" };
-  }
 
-  // Ticket validation
-  if (!Number.isInteger(tickets) || tickets <= 0) {
+  if (!Number.isInteger(tickets) || tickets <= 0)
     return {
       success: false,
-      message: "Number of tickets must be greater than 0"
+      message: "Number of tickets must be greater than 0",
     };
-  }
 
-  // Seat validation
-  if (schedule.availableSeats < tickets) {
+  if (schedule.availableSeats < tickets)
     return {
       success: false,
-      message: "Not enough seats available"
+      message: "Not enough seats available",
     };
-  }
 
-  // Departure validation
-  const departureDate = new Date(schedule.departureDate);
-
-  if (departureDate < new Date()) {
+  if (new Date(schedule.departureDate) < new Date())
     return {
       success: false,
-      message: "Cannot book a train that has already departed"
+      message: "Cannot book a train that has already departed",
     };
-  }
 
   schedule.availableSeats -= tickets;
 
@@ -133,7 +119,7 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
     seat: tickets,
     ticketPrice: schedule.ticketPrice,
     totalPrice: tickets * schedule.ticketPrice,
-    status: "Confirmed"
+    status: "Confirmed",
   };
 
   bookings.push(booking);
@@ -141,10 +127,7 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
   saveSchedules(schedules);
   localStorage.setItem("bookings", JSON.stringify(bookings));
 
-  return {
-    success: true,
-    booking
-  };
+  return { success: true, booking };
 }
 
 // ================================================
