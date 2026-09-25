@@ -108,6 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!field.value.trim()) return alert(`${label} is required`);
       }
 
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailPattern.test(fields.email.value.trim()))
+        return alert("Please enter a valid email address");
+
       if (new Date(fields.dob.value) > new Date())
         return alert("Date of birth cannot be in the future");
 
