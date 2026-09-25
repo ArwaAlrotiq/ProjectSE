@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /* -------------------------------
        UPDATE PROFILE
     -------------------------------- */
-   document.getElementById("btn-update").addEventListener("click", () => {
+document.getElementById("btn-update").addEventListener("click", () => {
 
     const passengers = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     const index = passengers.findIndex(p => p.id === fields.id.value);
@@ -101,12 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
         [fields.nationality.value.trim().length >= 2, "Please enter a valid nationality"],
         [/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email.value.trim()), "Please enter a valid email address"],
         [/^[0-9]{10}$/.test(fields.phone.value.trim()), "Please enter a valid phone number"],
-        [fields.passport.value.trim().length >= 5, "Please enter a valid Passport / ID"],
+        [/^[A-Za-z0-9]{5,20}$/.test(fields.passport.value.trim()), "Please enter a valid Passport / ID"],
         [new Date(fields.dob.value) <= new Date(), "Date of birth cannot be in the future"]
     ];
 
-    for (const [isValid, message] of validations) {
-        if (!isValid) return alert(message);
+    for (const [valid, message] of validations) {
+        if (!valid) return alert(message);
     }
 
     passengers[index] = {
@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(passengers));
-
     showUpdateConfirmation();
 });
 
