@@ -87,34 +87,46 @@ document.addEventListener('DOMContentLoaded', () => {
     /* -------------------------------
        UPDATE PROFILE
     -------------------------------- */
-    document.getElementById('btn-update').addEventListener('click', () => {
+    document.getElementById("btn-update").addEventListener("click", () => {
+      const passengers = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const currentId = fields.id.value;
 
-        let passengers = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        const currentId = fields.id.value;
+      const index = passengers.findIndex((p) => p.id === currentId);
 
-        const index = passengers.findIndex(p => p.id === currentId);
+      if (index === -1) return alert("Passenger not found!");
 
-        if (index === -1) {
-            alert("Passenger not found!");
-            return;
-        }
+      const requiredFields = [
+        [fields.firstName, "First name"],
+        [fields.lastName, "Last name"],
+        [fields.nationality, "Nationality"],
+        [fields.email, "Email address"],
+        [fields.phone, "Phone number"],
+        [fields.passport, "Passport / ID"],
+      ];
 
-        passengers[index] = {
-            ...passengers[index],
-            firstName: fields.firstName.value,
-            lastName:  fields.lastName.value,
-            gender:    fields.gender.value,
-            dob:       fields.dob.value,
-            nationality: fields.nationality.value,
-            email:     fields.email.value,
-            phone:     fields.phone.value,
-            passport:  fields.passport.value,
-            emergencyContact: fields.emergency.value
-        };
+      for (const [field, label] of requiredFields) {
+        if (!field.value.trim()) return alert(`${label} is required`);
+      }
 
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(passengers));
+      if (new Date(fields.dob.value) > new Date())
+        return alert("Date of birth cannot be in the future");
 
-        showUpdateConfirmation();
+      passengers[index] = {
+        ...passengers[index],
+        firstName: fields.firstName.value.trim(),
+        lastName: fields.lastName.value.trim(),
+        gender: fields.gender.value,
+        dob: fields.dob.value,
+        nationality: fields.nationality.value.trim(),
+        email: fields.email.value.trim(),
+        phone: fields.phone.value.trim(),
+        passport: fields.passport.value.trim(),
+        emergencyContact: fields.emergency.value.trim(),
+      };
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(passengers));
+
+      showUpdateConfirmation();
     });
 
     /* -------------------------------
