@@ -77,22 +77,57 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
   let schedules = loadSchedules();
   let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
 
-  const schedule = schedules.find(s => String(s.id).trim() === String(trainId).trim());
+  const schedule = schedules.find(
+    s => String(s.id).trim() === String(trainId).trim()
+  );
+
+  // Train validation
   if (!schedule) {
     return { success: false, message: "Train schedule not found" };
   }
 
+  // Passenger validation
+  if (!passengerName || passengerName.trim() === "") {
+    return { success: false, message: "Passenger name is required" };
+  }
+
+  if (!passengerId || String(passengerId).trim() === "") {
+    return { success: false, message: "Passenger ID is required" };
+  }
+
+  // Ticket validation
+  if (!Number.isInteger(tickets) || tickets <= 0) {
+    return {
+      success: false,
+      message: "Number of tickets must be greater than 0"
+    };
+  }
+
+  // Seat validation
   if (schedule.availableSeats < tickets) {
-    return { success: false, message: "Not enough seats available" };
+    return {
+      success: false,
+      message: "Not enough seats available"
+    };
+  }
+
+  // Departure validation
+  const departureDate = new Date(schedule.departureDate);
+
+  if (departureDate < new Date()) {
+    return {
+      success: false,
+      message: "Cannot book a train that has already departed"
+    };
   }
 
   schedule.availableSeats -= tickets;
 
   const booking = {
     id: Date.now().toString(),
-    passengerId: passengerId,
-    passengerName: passengerName,
-    trainId: trainId,
+    passengerId,
+    passengerName,
+    trainId,
     trainName: schedule.trainName,
     date: new Date().toISOString(),
     seat: tickets,
@@ -105,7 +140,11 @@ export function bookTickets(trainId, tickets, passengerName, passengerId) {
 
   saveSchedules(schedules);
   localStorage.setItem("bookings", JSON.stringify(bookings));
-  return { success: true, booking };
+
+  return {
+    success: true,
+    booking
+  };
 }
 
 // ================================================
